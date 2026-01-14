@@ -1,0 +1,11 @@
+@import "./colors.css";
+@import "./sizes.css";
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+a:hover {
+  color: var(--color-primary-dark);
+  text-decoration: underline;
+}

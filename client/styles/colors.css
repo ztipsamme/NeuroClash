@@ -1,0 +1,88 @@
+:root {
+  /* Primary – Sweet Peony */
+  --primary-h: 333;
+  --primary-s: 64%;
+  --primary-l: 66%;
+
+  /* Secondary – French Blue */
+  --secondary-h: 241;
+  --secondary-s: 41%;
+  --secondary-l: 39%;
+
+  /* Success – Celadon*/
+  --success-h: 101;
+  --success-s: 56%;
+  --success-l: 74%;
+
+  /* Cards – Glaucous */
+  --cards-h: 220;
+  --cards-s: 37%;
+  --cards-l: 57%;
+
+  /* Neutrals */
+  --bg-l: 98%; /* Bright Snow */
+  --text-l: 20%; /* Graphite */
+}
+
+:root {
+  --color-primary: hsl(var(--primary-h), var(--primary-s), var(--primary-l));
+
+  --color-primary-light: hsl(
+    var(--primary-h),
+    var(--primary-s),
+    calc(var(--primary-l) + 10%)
+  );
+
+  --color-primary-dark: hsl(
+    var(--primary-h),
+    var(--primary-s),
+    calc(var(--primary-l) - 15%)
+  );
+
+  --color-secondary: hsl(
+    var(--secondary-h),
+    var(--secondary-s),
+    var(--secondary-l)
+  );
+
+  --color-secondary-light: hsl(
+    var(--secondary-h),
+    var(--secondary-s),
+    calc(var(--secondary-l) + 10%)
+  );
+
+  --color-secondary-dark: hsl(
+    var(--secondary-h),
+    var(--secondary-s),
+    calc(var(--secondary-l) - 15%)
+  );
+
+  --color-success: hsl(var(--success-h), var(--success-s), var(--success-l));
+
+  --color-cards: hsl(var(--cards-h), var(--cards-s), var(--cards-l));
+
+  --color-background: hsl(0, 0%, var(--bg-l));
+  --color-text: hsl(0, 0%, var(--text-l));
+  --color-text-gray: hsl(0, 0%, calc(var(--text-l) + 30%));
+  --color-text-white: hsl(0, 0%, var(--bg-l));
+}
+
+:root {
+  --color-primary-gradient: linear-gradient(
+    to bottom,
+    var(--color-primary),
+    var(--color-primary-light)
+  );
+
+  --color-primary-dark-gradient: linear-gradient(
+    to bottom,
+    var(--color-primary-dark),
+    var(--color-primary)
+  );
+
+  --color-secondary-gradient: linear-gradient(
+    to bottom,
+    var(--color-secondary),
+    var(--color-secondary-light)
+  );
+}

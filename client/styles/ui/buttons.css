@@ -1,0 +1,33 @@
+@import "./colors.css";
+@import "./sizes.css";
+
+button {
+  background: var(--color-primary-gradient);
+  border: transparent;
+  border-radius: var(--border-radius-sm);
+  color: var(--color-text-white);
+  font-weight: var(--font-weight-medium);
+}
+
+button:hover {
+  background: var(--color-primary-dark-gradient);
+  box-shadow: 0 4px 8px var(--color-primary-light);
+  cursor: pointer;
+}
+
+button,
+button.sm {
+  min-width: 4rem;
+  padding: var(--padding-xs);
+  font-size: var(--font-size-xs);
+}
+
+button.md {
+  min-width: 6rem;
+  padding: var(--padding-sm);
+}
+
+button.lg {
+  min-width: 12rem;
+  padding: var(--padding-sm);
+}
