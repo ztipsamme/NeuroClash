@@ -1,3 +1,4 @@
-import "./MainNav.js";
-import "./QuizList.js";
-import "./QuizCard.js";
+import './MainNav.js'
+import './QuizList.js'
+import './QuizCard.js'
+import './SignUpForm.js'

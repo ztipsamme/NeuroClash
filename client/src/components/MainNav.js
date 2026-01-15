@@ -4,7 +4,7 @@ import { navigate } from '../router/index.js'
 const template = document.createElement('template')
 
 template.innerHTML = /* html */ `
-  <nav class="main-nav">
+  <nav id="main-nav">
   </nav>
 `
 export default class MainNav extends HTMLElement {
@@ -17,7 +17,7 @@ export default class MainNav extends HTMLElement {
     const currentPath = window.location.pathname
     const isCurrentPath = (path) => (currentPath === path ? 'active' : '')
 
-    const container = this.shadowRoot.querySelector('.main-nav')
+    const container = this.shadowRoot.querySelector('#main-nav')
     container.innerHTML = [
       { label: 'Home', path: '/' },
       // { label: 'My quizzes', path: '/my-quizzes' },
