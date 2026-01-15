@@ -1,8 +1,9 @@
-@import "./colors.css";
-@import "./sizes.css";
+@import './colors.css';
+@import './sizes.css';
 
 h1,
-h1 > strong {
+h1 > strong,
+.logo {
   background: var(--color-secondary-gradient);
   background-clip: text;
   font-size: 2.5rem;
@@ -50,4 +51,10 @@ h6 {
 
 strong {
   font-size: inherit;
+}
+
+.logo {
+  font-size: 2rem;
+  margin-bottom: 0;
+  padding: var(--padding-sm);
 }

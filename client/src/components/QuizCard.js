@@ -1,40 +1,40 @@
-import { WebComponentConstructorBase } from "../core/utils.js";
-import "./QuizCard.js";
+import { WebComponentConstructorBase } from '../core/utils.js'
+import './QuizCard.js'
 
-const template = document.createElement("template");
+const template = document.createElement('template')
 template.innerHTML = /* html */ `  
   <article class="quiz-card">
     <h2 class="quiz-title"></h2>
     <p class="quiz-category"></p>
     <p class="quiz-description"></p>
     <p class="quiz-created-by"></p>
-    <button>Start Quiz</button>
+    <button class="sm">Start Quiz</button>
   </article>
-`;
+`
 export default class QuizCard extends HTMLElement {
   constructor() {
-    super();
-    WebComponentConstructorBase(this, template);
+    super()
+    WebComponentConstructorBase(this, template)
   }
 
   static get observedAttributes() {
-    return ["title", "description"];
+    return ['title', 'description']
   }
 
   attributeChangedCallback() {
     const content = [
-      { selector: ".quiz-title", attribute: "title" },
-      { selector: ".quiz-category", attribute: "category" },
-      { selector: ".quiz-description", attribute: "description" },
-      { selector: ".quiz-created-by", attribute: "createdBy" },
-    ];
+      { selector: '.quiz-title', attribute: 'title' },
+      { selector: '.quiz-category', attribute: 'category' },
+      { selector: '.quiz-description', attribute: 'description' },
+      { selector: '.quiz-created-by', attribute: 'createdBy' },
+    ]
 
     content.forEach((e) => {
       this.shadowRoot.querySelector(e.selector).textContent = this.getAttribute(
-        e.attribute,
-      );
-    });
+        e.attribute
+      )
+    })
   }
 }
 
-window.customElements.define("quiz-card", QuizCard);
+window.customElements.define('quiz-card', QuizCard)

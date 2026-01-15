@@ -14,3 +14,8 @@ export const WebComponentConstructorBase = (component, template, styles) => {
   applyStyles(component.shadowRoot, styles)
   component.shadowRoot.appendChild(template.content.cloneNode(true))
 }
+
+export const Icon = (iconName) => {
+  const icon = lucide.createElement(lucide[iconName])
+  return icon.outerHTML
+}

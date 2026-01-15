@@ -1,7 +1,11 @@
-@import "./colors.css";
-@import "./sizes.css";
+@import './colors.css';
+@import './sizes.css';
 
 button {
+  --color: var(--color-primary);
+  --gradient: var(--color-primary-dark-gradient);
+  --shadow: var(--color-primary-light);
+
   background: var(--color-primary-gradient);
   border: transparent;
   border-radius: var(--border-radius-sm);
@@ -9,13 +13,20 @@ button {
   font-weight: var(--font-weight-medium);
 }
 
+button.secondary,
+.ghost.secondary {
+  --color: var(--color-secondary);
+  --gradient: var(--color-secondary-gradient);
+  --shadow: var(--color-secondary);
+}
+
 button:hover {
-  background: var(--color-primary-dark-gradient);
-  box-shadow: 0 4px 8px var(--color-primary-light);
+  background: var(--gradient);
+  box-shadow: 0 4px 8px var(--shadow);
   cursor: pointer;
 }
 
-button,
+/* button, */
 button.sm {
   min-width: 4rem;
   padding: var(--padding-xs);
@@ -30,4 +41,66 @@ button.md {
 button.lg {
   min-width: 12rem;
   padding: var(--padding-sm);
+}
+
+button.align-left {
+  text-align: start;
+}
+
+.ghost {
+  --border-edge: 2px;
+  --border-edge-hover: 4px;
+
+  --color: var(--color-primary);
+  --gradient: var(--color-primary-dark-gradient);
+
+  font-weight: var(--font-weight-bold);
+  position: relative;
+}
+
+.ghost::before,
+.ghost::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+}
+
+.ghost::before,
+.ghost::before {
+  background: var(--gradient);
+  border-radius: var(--border-radius-sm);
+  inset: 0;
+}
+
+.ghost::after {
+  background: var(--color-background);
+  border-radius: calc(var(--border-radius-sm) - var(--border-edge));
+  height: calc(100% - (var(--border-edge) * 2));
+  left: var(--border-edge);
+  top: var(--border-edge);
+  width: calc(100% - (var(--border-edge) * 2));
+}
+
+.ghost:hover::after,
+.ghost.active::after {
+  background-color: transparent;
+}
+
+/* text gradient variant */
+.ghost {
+  background: var(--gradient);
+  background-clip: text;
+  box-decoration-break: clone;
+  text-decoration: none;
+  -webkit-background-clip: text;
+  -webkit-box-decoration-break: clone;
+  -webkit-text-fill-color: rgba(0, 0, 0, 0);
+}
+
+/* text gradient hover */
+button:hover,
+.ghost:hover,
+.ghost.active {
+  font-weight: var(--font-weight-medium);
+  -webkit-text-fill-color: rgba(255, 255, 255, 1);
 }

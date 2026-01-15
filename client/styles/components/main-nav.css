@@ -15,6 +15,10 @@ a {
   padding: var(--padding-sm);
   border-radius: var(--border-radius-sm);
   text-decoration: none;
+
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
 }
 
 a:hover {
@@ -26,67 +30,9 @@ a:not(.ghost):hover,
 a:not(.ghost).active {
   color: var(--color-text-white);
   background: var(--color-secondary-gradient);
-}
-
-/* Ghost */
-.ghost {
-  --color: var(--color-primary);
-  --gradient: var(--color-primary-dark-gradient);
-}
-
-.ghost.secondary {
-  --color: var(--color-secondary);
-  --gradient: var(--color-secondary-gradient);
-}
-
-.ghost {
-  --border-edge: 2px;
-  --border-edge-hover: 4px;
-  font-weight: var(--font-weight-bold);
-  position: relative;
-}
-
-.ghost::before,
-.ghost::after {
-  content: '';
-  position: absolute;
-  z-index: -1;
-}
-
-.ghost::before {
-  background: var(--gradient);
-  border-radius: var(--border-radius-sm);
-  inset: 0;
-}
-
-.ghost::after {
-  background: var(--color-background);
-  border-radius: calc(var(--border-radius-sm) - var(--border-edge));
-  height: calc(100% - (var(--border-edge) * 2));
-  left: var(--border-edge);
-  top: var(--border-edge);
-  width: calc(100% - (var(--border-edge) * 2));
-}
-
-.ghost:hover::after,
-.ghost.active::after {
-  background-color: transparent;
-}
-
-/* text gradient variant */
-.ghost {
-  background: var(--gradient);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-box-decoration-break: clone;
-  box-decoration-break: clone;
-  text-decoration: none;
-  -webkit-text-fill-color: rgba(0, 0, 0, 0);
-}
-
-/* text gradient hover */
-.ghost:hover,
-.ghost.active {
   font-weight: var(--font-weight-medium);
-  -webkit-text-fill-color: rgba(255, 255, 255, 1);
+}
+
+.ghost {
+  font-size: var(--font-size-sm);
 }

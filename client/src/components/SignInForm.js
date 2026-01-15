@@ -5,7 +5,7 @@ import { signInUser } from '../services/userService.js'
 const template = document.createElement('template')
 
 template.innerHTML = /* html */ `
-  <form id="signInForm" class="form-stack">
+  <form id="signInForm" class="center">
     <label for="username" class="sr-only">Username:</label>
     <input type="text" name="username" placeholder="Username"/>
     
@@ -13,7 +13,7 @@ template.innerHTML = /* html */ `
     <input type="text" name="password" placeholder="Password"/>
 
     <p class="errorMessage" hidden="true"></p>
-    <button class="md" type="submit">Sign in</button>
+    <button class="lg" type="submit">Sign in</button>
   </form>
 `
 

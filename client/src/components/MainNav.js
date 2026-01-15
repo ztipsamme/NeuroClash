@@ -1,12 +1,15 @@
-import { WebComponentConstructorBase } from '../core/utils.js'
+import { Icon, WebComponentConstructorBase } from '../core/utils.js'
 import { navigate } from '../router/index.js'
 import { isSignedIn, signOut } from '../services/userService.js'
 
 const template = document.createElement('template')
 
 template.innerHTML = /* html */ `
-  <nav id="main-nav">
-  </nav>
+  <aside>
+    <div class="logo">NeuroClash</div>
+    <nav id="main-nav"></nav>
+    <nav id="auth-nav"></nav>
+  </aside>
 `
 export default class MainNav extends HTMLElement {
   constructor() {
@@ -18,61 +21,64 @@ export default class MainNav extends HTMLElement {
     const currentPath = window.location.pathname
     const isCurrentPath = (path) => (currentPath === path ? 'active' : '')
 
-    const container = this.shadowRoot.querySelector('#main-nav')
-    const nav = [
-      { label: 'Home', path: '/' },
-      // { label: 'My quizzes', path: '/my-quizzes' },
+    const mainNav = this.shadowRoot.querySelector('#main-nav')
+    const authNav = this.shadowRoot.querySelector('#auth-nav')
+
+    const mainLinks = [{ label: 'Home', icon: Icon('Home'), path: '/' }]
+
+    const authLinks = [
       {
         label: 'Sign In',
         path: '/sign-in',
         classes: 'ghost secondary',
-        hidden: isSignedIn(),
       },
       {
         label: 'Sign Up',
         path: '/sign-up',
         classes: 'ghost',
-        hidden: isSignedIn(),
       },
     ]
+
+    mainNav.innerHTML = this.renderLinks(mainLinks, isCurrentPath)
+
+    if (isSignedIn()) {
+      authNav.insertAdjacentHTML(
+        'beforeend',
+        `<button class="md align-left ghost secondary">Sign Out</button>`
+      )
+    } else {
+      authNav.innerHTML = this.renderLinks(authLinks, isCurrentPath)
+    }
+  }
+
+  renderLinks(links, isCurrentPath) {
+    return links
       .map(
-        ({ label, path, classes, hidden }) => /*html*/ `
-        <a href="${path}" data-link data-path="${path}"
-           class="${isCurrentPath(path)} ${classes || ''}"
-            ${hidden ? 'hidden' : ''}>
-          ${label}
-        </a>
-      `
+        ({ label, icon, path, classes, hidden }) => /* html */ `
+          <a href="${path}" data-link
+             class="${isCurrentPath(path)} ${classes || ''}"
+             hidden>
+            ${icon ? `${icon} ` : ''}${label}
+          </a>
+        `
       )
       .join('')
-
-    container.innerHTML = /* html */ `
-      ${nav}
-      ${
-        isSignedIn()
-          ? '<button class="md ghost secondary">Sign Out</button>'
-          : ''
-      }
-    `
   }
 
   connectedCallback() {
-    const links = this.shadowRoot.querySelectorAll('a')
-    links.forEach((link) => {
-      link.addEventListener('click', (e) => {
+    this.shadowRoot.addEventListener('click', (e) => {
+      const link = e.target.closest('[data-link]')
+      if (link) {
         e.preventDefault()
         navigate(link.getAttribute('href'))
-      })
-    })
+      }
 
-    const signOutButton = this.shadowRoot.querySelector('button')
-    if (signOutButton) {
-      signOutButton.addEventListener('click', (e) => {
-        e.preventDefault()
+      const btn = e.target.closest('button')
+      if (btn) {
         signOut()
         navigate('/sign-in')
-      })
-    }
+      }
+    })
   }
 }
 
