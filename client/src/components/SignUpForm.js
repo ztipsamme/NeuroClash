@@ -1,4 +1,5 @@
 import { WebComponentConstructorBase } from '../core/utils.js'
+import { navigate } from '../router/index.js'
 import { createUser } from '../services/userService.js'
 
 const template = document.createElement('template')
@@ -60,9 +61,10 @@ export default class SignUpForm extends HTMLElement {
         if (!res.ok) {
           errMessage.hidden = false
           errMessage.textContent = res.data.message
-        } else {
-          errMessage.hidden = true
+          return
         }
+
+        navigate('/sign-in')
       } catch (error) {
         console.log('Server error: ' + error.message)
       }

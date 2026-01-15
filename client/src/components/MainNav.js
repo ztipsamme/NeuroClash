@@ -1,5 +1,6 @@
 import { WebComponentConstructorBase } from '../core/utils.js'
 import { navigate } from '../router/index.js'
+import { isSignedIn, signOut } from '../services/userService.js'
 
 const template = document.createElement('template')
 
@@ -18,31 +19,60 @@ export default class MainNav extends HTMLElement {
     const isCurrentPath = (path) => (currentPath === path ? 'active' : '')
 
     const container = this.shadowRoot.querySelector('#main-nav')
-    container.innerHTML = [
+    const nav = [
       { label: 'Home', path: '/' },
       // { label: 'My quizzes', path: '/my-quizzes' },
-      // { label: 'Sign In', path: '/sign-in', classes: 'ghost secondary' },
-      { label: 'Sign Up', path: '/sign-up', classes: 'ghost' },
+      {
+        label: 'Sign In',
+        path: '/sign-in',
+        classes: 'ghost secondary',
+        hidden: isSignedIn(),
+      },
+      {
+        label: 'Sign Up',
+        path: '/sign-up',
+        classes: 'ghost',
+        hidden: isSignedIn(),
+      },
     ]
       .map(
-        ({ label, path, classes }) => /*html*/ `
+        ({ label, path, classes, hidden }) => /*html*/ `
         <a href="${path}" data-link data-path="${path}"
-           class="${isCurrentPath(path)} ${classes || ''}">
+           class="${isCurrentPath(path)} ${classes || ''}"
+            ${hidden ? 'hidden' : ''}>
           ${label}
         </a>
       `
       )
       .join('')
+
+    container.innerHTML = /* html */ `
+      ${nav}
+      ${
+        isSignedIn()
+          ? '<button class="md ghost secondary">Sign Out</button>'
+          : ''
+      }
+    `
   }
 
   connectedCallback() {
-    this.shadowRoot.addEventListener('click', (e) => {
-      const link = e.target.closest('[data-link]')
-      if (!link) return
-
-      e.preventDefault()
-      navigate(link.getAttribute('href'))
+    const links = this.shadowRoot.querySelectorAll('a')
+    links.forEach((link) => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault()
+        navigate(link.getAttribute('href'))
+      })
     })
+
+    const signOutButton = this.shadowRoot.querySelector('button')
+    if (signOutButton) {
+      signOutButton.addEventListener('click', (e) => {
+        e.preventDefault()
+        signOut()
+        navigate('/sign-in')
+      })
+    }
   }
 }
 

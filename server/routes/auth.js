@@ -10,7 +10,7 @@ import {
 } from '../utils.js'
 
 const router = express.Router()
-const SECRET = 'minhemliga123'
+let SECRET = process.env.SECRET
 
 router.get('/', async (req, res) => {
   try {
@@ -74,7 +74,12 @@ router.post('/sign-up', async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10)
-    await usersCollection.insertOne({ username, password: hashedPassword })
+    await usersCollection.insertOne({
+      username,
+      email,
+      birthday,
+      password: hashedPassword,
+    })
 
     res.status(200).json({ message: 'User created' })
   } catch (error) {
@@ -87,17 +92,23 @@ router.post('/sign-in', async (req, res) => {
   const { username, password } = req.body
 
   try {
-  } catch (error) {}
-  const user = users.find((u) => u.username === username)
-  if (!user)
-    return res.status(400).json({ message: 'Incorrect username or password' })
+    const usersCollection = getCollection('users')
+    const user = await usersCollection.findOne({ username })
 
-  const valid = await bcrypt.compare(password, user.password)
-  if (!valid)
-    return res.status(400).json({ message: 'Incorrect username or password' })
+    if (!user)
+      return res.status(400).json({ message: 'Incorrect username or password' })
 
-  const token = jwt.sign({ username }, SECRET, { expiresIn: '1h' })
-  res.json({ token })
+    const valid = await bcrypt.compare(password, user.password)
+    if (!valid) {
+      return res.status(400).json({ message: 'Incorrect username or password' })
+    }
+
+    const token = jwt.sign({ username }, SECRET, { expiresIn: '1h' })
+    res.status(200).json({ token })
+  } catch (error) {
+    console.error(error)
+    return res.status(500).json({ message: 'Server error' })
+  }
 })
 
 export default router
