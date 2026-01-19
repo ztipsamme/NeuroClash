@@ -31,7 +31,7 @@ const init = async (id) => {
 
     document.querySelector('#quiz-title').textContent = `Result: ${quiz.Title}`
 
-    document.querySelector('#quiz-time').textContent = result.time
+    document.querySelector('#quiz-time').textContent = result.totalTimePlayed
     document.querySelector('#quiz-correct').textContent = result.correctAnswers
     document.querySelector('#quiz-incorrect').textContent =
       result.incorrectAnswers

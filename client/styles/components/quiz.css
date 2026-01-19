@@ -1,0 +1,24 @@
+@import '../global.css';
+
+.answers {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-auto-rows: 48px;
+  gap: var(--spacing-sm);
+}
+
+button.answer.correct {
+  --gradient: var(--color-success-gradient);
+  --shadow: var(--color-success);
+}
+
+button.answer.incorrect {
+  --gradient: var(--color-danger-gradient);
+  --shadow: var(--color-danger);
+}
+
+button:not(.ghost).answer.correct,
+button.answer.incorrect {
+  font-weight: var(--font-weight-bold);
+  background: var(--gradient);
+}

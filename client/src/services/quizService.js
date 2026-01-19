@@ -27,6 +27,8 @@ export const createQuiz = async (id) => {
   let currentQuestionIdx = 0
   let correctAnswers = 0
   let intervalId = null
+  let totalTimePlayed = 0
+  let secondsLeft = timePerQuestion
 
   const shuffle = (arr) => {
     let i = arr.length,
@@ -56,7 +58,9 @@ export const createQuiz = async (id) => {
 
     intervalId = setInterval(() => {
       seconds--
+      secondsLeft = seconds
       onTick(seconds)
+
       if (seconds <= 0) {
         clearInterval(intervalId)
         onTimeOut()
@@ -64,31 +68,40 @@ export const createQuiz = async (id) => {
     }, 1000)
   }
 
-  const answer = (answerIdx = null) => {
+  const stopTimer = () => {
+    if (intervalId) clearInterval(intervalId)
+
+    totalTimePlayed += timePerQuestion - secondsLeft
+  }
+
+  const isCorrect = (answerIdx = null) => {
     if (intervalId) clearInterval(intervalId)
 
     const question = getCurrentQuestion()
+
     const answer =
       answerIdx !== null ? question.Answers[answerIdx] : { IsCorrect: false }
 
-    if (answer.IsCorrect) correctAnswers++
-
-    if (currentQuestionIdx >= qLength - 1) {
-      result()
-      return null
+    if (answer.IsCorrect) {
+      correctAnswers++
+      return true
+    } else {
+      return false
     }
-
-    currentQuestionIdx++
-    return getCurrentQuestion()
   }
 
   const result = () => {
+    if (currentQuestionIdx < qLength - 1) {
+      currentQuestionIdx++
+      return getCurrentQuestion()
+    }
+
     sessionStorage.setItem(
       `quiz-${id}-result`,
       JSON.stringify({
-        time: 0,
         correctAnswers,
         incorrectAnswers: qLength - correctAnswers,
+        totalTimePlayed,
       })
     )
 
@@ -98,8 +111,10 @@ export const createQuiz = async (id) => {
   return {
     title: Quiz.Title,
     getCurrentQuestion,
-    answer,
+    IsCorrect: isCorrect,
+    result,
     startTimer,
+    stopTimer,
     timePerQuestion,
   }
 }

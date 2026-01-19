@@ -19,6 +19,14 @@ const play = /*html*/ `
       `
 
 export default function Quiz({ id }) {
+  if (!document.getElementById('quiz-css')) {
+    const link = document.createElement('link')
+    link.id = 'quiz-css'
+    link.rel = 'stylesheet'
+    link.href = '/styles/components/quiz.css' // sökväg till din CSS-fil
+    document.head.appendChild(link)
+  }
+
   queueMicrotask(() => init(id))
 
   return /* html */ `
@@ -58,32 +66,60 @@ const PlayQuiz = async (id) => {
   const form = document.querySelector('#quiz-play-form')
   const statementEl = form.querySelector('.question-statement')
   const answers = form.querySelector('.answers')
+  let currentQuestion = null
 
-  const renderQuestion = (question) => {
-    if (!question) return
+  const renderQuestion = () => {
+    currentQuestion = quiz.getCurrentQuestion()
 
-    statementEl.textContent = question.Statement
-    answers.innerHTML = question.Answers.map(
+    if (!currentQuestion) return
+
+    statementEl.textContent = currentQuestion.Statement
+    answers.innerHTML = currentQuestion.Answers.map(
       (answer, idx) =>
-        `<button type="button" data-index="${idx}" class="sm">${answer.Text}</button>`
+        `<button type="button" data-index="${idx}" class="answer ghost">${answer.Text}</button>`
     ).join('')
 
     quiz.startTimer(
-      (seconds) => {
-        timer.textContent = `Time: ${seconds}s`
-      },
-      () => {
-        renderQuestion(quiz.answer())
-      }
+      (seconds) => (timer.textContent = `Time: ${seconds}s`),
+      () => lockAndResolveQuestion()
     )
   }
 
-  renderQuestion(quiz.getCurrentQuestion())
+  renderQuestion()
 
   answers.addEventListener('click', (e) => {
     const btn = e.target.closest('button')
-    if (!btn) return
+    if (!btn || btn.disabled) return
 
-    renderQuestion(quiz.answer(Number(btn.dataset.index)))
+    lockAndResolveQuestion(btn)
   })
+
+  const lockAndResolveQuestion = (clickedBtn = null) => {
+    quiz.stopTimer?.()
+
+    const correctIdx = currentQuestion.Answers.findIndex((a) => a.IsCorrect)
+    const buttons = answers.querySelectorAll('button')
+    const correctBtn = buttons[correctIdx]
+
+    if (clickedBtn) {
+      const isCorrect = quiz.IsCorrect(Number(clickedBtn.dataset.index))
+      clickedBtn.classList.add(isCorrect ? 'correct' : 'incorrect')
+      clickedBtn.classList.remove('ghost')
+      correctBtn.classList.add('correct')
+    } else {
+      buttons.forEach((b) => {
+        b.classList.add('incorrect')
+        b.classList.remove('ghost')
+        correctBtn.classList.add('correct')
+        correctBtn.classList.remove('incorrect')
+      })
+    }
+
+    buttons.forEach((b) => (b.disabled = true))
+
+    setTimeout(() => {
+      quiz.result()
+      renderQuestion()
+    }, 800)
+  }
 }

@@ -10,9 +10,19 @@
   --secondary-l: 39%;
 
   /* Success – Celadon*/
-  --success-h: 101;
+  /* --success-h: 101;
   --success-s: 56%;
-  --success-l: 74%;
+  --success-l: 74%; */
+
+  /* Success – Light Green*/
+  --success-h: 152;
+  --success-s: 72%;
+  --success-l: 46%;
+
+  /* Danger – Cherry Rose */
+  --danger-h: 335;
+  --danger-s: 72%;
+  --danger-l: 38%;
 
   /* Cards – Glaucous */
   --cards-h: 220;
@@ -59,6 +69,32 @@
 
   --color-success: hsl(var(--success-h), var(--success-s), var(--success-l));
 
+  --color-success-light: hsl(
+    var(--success-h),
+    var(--success-s),
+    calc(var(--success-l) + 15%)
+  );
+
+  --color-success-dark: hsl(
+    var(--success-h),
+    var(--success-s),
+    calc(var(--success-l) - 20%)
+  );
+
+  --color-danger: hsl(var(--danger-h), var(--danger-s), var(--danger-l));
+
+  --color-danger-light: hsl(
+    var(--danger-h),
+    var(--danger-s),
+    calc(var(--danger-l) + 10%)
+  );
+
+  --color-danger-dark: hsl(
+    var(--danger-h),
+    var(--danger-s),
+    calc(var(--danger-l) - 15%)
+  );
+
   --color-cards: hsl(var(--cards-h), var(--cards-s), var(--cards-l));
 
   --color-background: hsl(0, 0%, var(--bg-l));
@@ -84,5 +120,17 @@
     to bottom,
     var(--color-secondary),
     var(--color-secondary-light)
+  );
+
+  --color-success-gradient: linear-gradient(
+    to bottom,
+    var(--color-success),
+    var(--color-success-light)
+  );
+
+  --color-danger-gradient: linear-gradient(
+    to bottom,
+    var(--color-danger),
+    var(--color-danger-light)
   );
 }
