@@ -1,5 +1,6 @@
 import express from 'express'
 import { getCollection } from '../database.js'
+import { ObjectId } from 'mongodb'
 
 const router = express.Router()
 
@@ -31,13 +32,64 @@ router.get('/:id', async (req, res) => {
 
   try {
     const quizzesCollection = getCollection('quizzes')
-    const quiz = await quizzesCollection.findOne({ _id: new ObjectId(id) })
+    const usersCollection = getCollection('users')
 
-    if (!quiz) {
-      return res.status(404), json({ message: 'Quiz not found' })
+    const quiz = await quizzesCollection.findOne({
+      _id: new ObjectId(id),
+    })
+
+    if (!quiz) res.status(400).json({ message: 'Quiz not found' })
+
+    const creator = await usersCollection.findOne({
+      _id: new ObjectId(quiz.CreatedBy),
+    })
+
+    if (!creator) res.status(400).json({ message: 'Quiz creator not found' })
+
+    const populatedQuiz = {
+      ...quiz,
+      CreatedBy: creator,
     }
 
-    res.status(200).json(quiz)
+    res.status(200).json(populatedQuiz)
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ message: 'Server error' })
+  }
+})
+
+router.get('/:id/questions', async (req, res) => {
+  const { id } = req.params
+
+  try {
+    const quizzesCollection = getCollection('quizzes')
+    const questionsCollection = getCollection('questions')
+
+    const quiz = await quizzesCollection.findOne({
+      _id: new ObjectId(id),
+    })
+
+    if (!quiz) res.status(400).json({ message: 'Quiz not found' })
+
+    const questions = await Promise.all(
+      quiz.QuestionIds.map(
+        async (id) =>
+          await questionsCollection.findOne({
+            _id: new ObjectId(id),
+          })
+      )
+    )
+
+    if (!questions)
+      res.status(400).json({ message: 'Quiz questions not found' })
+
+    res.status(200).json({
+      Quiz: {
+        _id: quiz._id,
+        Title: quiz.Title,
+      },
+      Questions: questions,
+    })
   } catch (error) {
     console.error(error)
     res.status(500).json({ message: 'Server error' })

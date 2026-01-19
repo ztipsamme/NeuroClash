@@ -8,7 +8,7 @@ template.innerHTML = /* html */ `
     <p class="quiz-category"></p>
     <p class="quiz-description"></p>
     <p class="quiz-created-by"></p>
-    <button class="sm">Start Quiz</button>
+    <a href="" class="quiz-link sm">Play Quiz</a>
   </article>
 `
 export default class QuizCard extends HTMLElement {
@@ -27,12 +27,20 @@ export default class QuizCard extends HTMLElement {
       { selector: '.quiz-category', attribute: 'category' },
       { selector: '.quiz-description', attribute: 'description' },
       { selector: '.quiz-created-by', attribute: 'createdBy' },
+      { selector: '.quiz-link', attribute: 'url', prop: 'href' },
     ]
 
-    content.forEach((e) => {
-      this.shadowRoot.querySelector(e.selector).textContent = this.getAttribute(
-        e.attribute
-      )
+    content.forEach(({ selector, attribute, prop }) => {
+      const el = this.shadowRoot.querySelector(selector)
+      const value = this.getAttribute(attribute)
+
+      if (!el || !value) return
+
+      if (prop === 'href') {
+        el.setAttribute('href', value)
+      } else {
+        el.textContent = value
+      }
     })
   }
 }

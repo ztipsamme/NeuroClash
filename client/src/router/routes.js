@@ -1,5 +1,6 @@
 import Home from '../views/Home.js'
-import QuizLanding from '../views/QuizLanding.js'
+import Quiz from '../views/Quiz.js'
+import QuizResult from '../views/QuizResult.js'
 import SignIn from '../views/SignIn.js'
 import SignUp from '../views/SignUp.js'
 
@@ -10,8 +11,13 @@ export const routes = [
     isProtected: true,
   },
   {
-    path: '/quiz:id',
-    view: QuizLanding,
+    path: '/quiz/:id',
+    view: Quiz,
+    isProtected: true,
+  },
+  {
+    path: '/quiz/:id/result',
+    view: QuizResult,
     isProtected: true,
   },
   {

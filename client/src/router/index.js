@@ -10,20 +10,48 @@ export function initRouter() {
 
 function handleRoute() {
   const path = window.location.pathname
-  const route = routes.find((r) => r.path === path) || {
-    view: NotFound,
+
+  for (const route of routes) {
+    const params = matchRoute(route.path, path)
+
+    if (params) {
+      if (route.isProtected && !isSignedIn()) {
+        navigate('/sign-in')
+        return
+      }
+
+      render(route, params)
+      return
+    }
   }
 
-  if (route.isProtected && !isSignedIn()) {
-    alert('You must be signed in to view this page.')
-    navigate('/sign-in')
-    return
-  }
-
-  render(route)
+  render({ view: NotFound })
 }
 
 export function navigate(url) {
   history.pushState(null, null, url)
   window.dispatchEvent(new PopStateEvent('popstate'))
+}
+
+function matchRoute(routePath, urlPath) {
+  const routePaths = routePath.split('/')
+  const urlPaths = urlPath.split('/')
+
+  if (routePaths.length !== urlPaths.length) return null
+
+  const params = {}
+
+  for (let i = 0; i < routePaths.length; i++) {
+    const route = routePaths[i]
+    const url = urlPaths[i]
+
+    if (route.startsWith(':')) {
+      const key = route.slice(1)
+      params[key] = url
+    } else if (route !== url) {
+      return null
+    }
+  }
+
+  return params
 }
