@@ -1,22 +1,19 @@
 import { navigate } from '../router/index.js'
 
-export const getQuizzes = async () => {
-  const res = await fetch('http://localhost:8000/quizzes')
+const fetchData = async (path) => {
+  const res = await fetch(path)
   const data = await res.json()
   return data
 }
 
-export const getQuizById = async (id) => {
-  const res = await fetch(`http://localhost:8000/quizzes/${id}`)
-  const data = await res.json()
-  return data
-}
+export const getQuizzes = async () =>
+  await fetchData('http://localhost:8000/quizzes')
 
-const getQuizWithQuestionsById = async (id) => {
-  const res = await fetch(`http://localhost:8000/quizzes/${id}/questions`)
-  const data = await res.json()
-  return data
-}
+export const getQuizById = async (id) =>
+  await fetchData(`http://localhost:8000/quizzes/${id}`)
+
+const getQuizWithQuestionsById = async (id) =>
+  await fetchData(`http://localhost:8000/quizzes/${id}/questions`)
 
 export const createQuiz = async (id) => {
   const { Quiz, Questions } = await getQuizWithQuestionsById(id)
