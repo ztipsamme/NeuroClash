@@ -5,6 +5,17 @@ const landing = /*html*/ `
       <p id="quiz-description"></p>
       <p id="quiz-meta"></p>
       <button id="play-quiz" class="sm">Start Quiz</button>
+      <div>
+        <button class="button ">primary</button>
+        <button class="button primary">primary</button>
+        <button class="button secondary">secondary</button>
+        <button class="button success">success</button>
+        <button class="button danger">danger</button>
+        <button class="button ghost">ghost</button>
+        <a href="#" class="button">a</>
+        <a href="#" class="button ghost">a ghost</>
+        <a href="#" class="">link</>
+      <div>
       `
 
 const play = /*html*/ `

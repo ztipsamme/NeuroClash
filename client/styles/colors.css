@@ -1,136 +1,46 @@
 :root {
-  /* Primary – Sweet Peony */
-  --primary-h: 333;
-  --primary-s: 64%;
-  --primary-l: 66%;
-
-  /* Secondary – French Blue */
-  --secondary-h: 241;
-  --secondary-s: 41%;
-  --secondary-l: 39%;
-
-  /* Success – Celadon*/
-  /* --success-h: 101;
-  --success-s: 56%;
-  --success-l: 74%; */
-
-  /* Success – Light Green*/
-  --success-h: 152;
-  --success-s: 72%;
-  --success-l: 46%;
-
-  /* Danger – Cherry Rose */
-  --danger-h: 335;
-  --danger-s: 72%;
-  --danger-l: 38%;
-
-  /* Cards – Glaucous */
-  --cards-h: 220;
-  --cards-s: 37%;
-  --cards-l: 57%;
-
-  /* Neutrals */
-  --bg-l: 98%; /* Bright Snow */
-  --text-l: 20%; /* Graphite */
+  --color-sweet-peony: hsl(333, 64%, 66%);
+  --color-french-blue: hsl(241, 41%, 39%);
+  --color-light-green: hsl(152, 72%, 46%);
+  --color-cherry-rose: hsl(335, 72%, 38%);
+  --color-glaucous: hsl(220, 37%, 57%);
+  --color-bright-snow: hsl(0, 0%, 98%);
+  --color-graphite: hsl(0, 0%, 20%);
 }
 
 :root {
-  --color-primary: hsl(var(--primary-h), var(--primary-s), var(--primary-l));
+  --color-primary: var(--color-sweet-peony);
+  --color-secondary: var(--color-french-blue);
+  --color-success: var(--color-light-green);
+  --color-danger: var(--color-cherry-rose);
 
-  --color-primary-light: hsl(
-    var(--primary-h),
-    var(--primary-s),
-    calc(var(--primary-l) + 10%)
-  );
-
-  --color-primary-dark: hsl(
-    var(--primary-h),
-    var(--primary-s),
-    calc(var(--primary-l) - 15%)
-  );
-
-  --color-secondary: hsl(
-    var(--secondary-h),
-    var(--secondary-s),
-    var(--secondary-l)
-  );
-
-  --color-secondary-light: hsl(
-    var(--secondary-h),
-    var(--secondary-s),
-    calc(var(--secondary-l) + 10%)
-  );
-
-  --color-secondary-dark: hsl(
-    var(--secondary-h),
-    var(--secondary-s),
-    calc(var(--secondary-l) - 15%)
-  );
-
-  --color-success: hsl(var(--success-h), var(--success-s), var(--success-l));
-
-  --color-success-light: hsl(
-    var(--success-h),
-    var(--success-s),
-    calc(var(--success-l) + 15%)
-  );
-
-  --color-success-dark: hsl(
-    var(--success-h),
-    var(--success-s),
-    calc(var(--success-l) - 20%)
-  );
-
-  --color-danger: hsl(var(--danger-h), var(--danger-s), var(--danger-l));
-
-  --color-danger-light: hsl(
-    var(--danger-h),
-    var(--danger-s),
-    calc(var(--danger-l) + 10%)
-  );
-
-  --color-danger-dark: hsl(
-    var(--danger-h),
-    var(--danger-s),
-    calc(var(--danger-l) - 15%)
-  );
-
-  --color-cards: hsl(var(--cards-h), var(--cards-s), var(--cards-l));
-
-  --color-background: hsl(0, 0%, var(--bg-l));
-  --color-text: hsl(0, 0%, var(--text-l));
-  --color-text-gray: hsl(0, 0%, calc(var(--text-l) + 30%));
-  --color-text-white: hsl(0, 0%, var(--bg-l));
+  --color-text-light: var(--color-graphite);
+  --color-text-medium: hsl(from var(--color-graphite) h s calc(l + 30));
+  --color-text-dark: var(--color-bright-snow);
 }
 
-:root {
-  --color-primary-gradient: linear-gradient(
+* {
+  --color-base: var(--color-primary);
+  --color-light: hsl(from var(--color-base) h s calc(l + 10));
+  --color-dark: hsl(from var(--color-base) h s calc(l - 15));
+  --color-gradient: linear-gradient(
     to bottom,
-    var(--color-primary),
-    var(--color-primary-light)
+    var(--color-base),
+    var(--color-light)
   );
+  --color-gradient-dark: linear-gradient(
+    to bottom,
+    var(--color-dark),
+    var(--color-base)
+  );
+}
 
-  --color-primary-dark-gradient: linear-gradient(
-    to bottom,
-    var(--color-primary-dark),
-    var(--color-primary)
-  );
-
-  --color-secondary-gradient: linear-gradient(
-    to bottom,
-    var(--color-secondary),
-    var(--color-secondary-light)
-  );
-
-  --color-success-gradient: linear-gradient(
-    to bottom,
-    var(--color-success),
-    var(--color-success-light)
-  );
-
-  --color-danger-gradient: linear-gradient(
-    to bottom,
-    var(--color-danger),
-    var(--color-danger-light)
-  );
+.secondary {
+  --color-base: var(--color-secondary);
+}
+.success {
+  --color-base: var(--color-success);
+}
+.danger {
+  --color-base: var(--color-danger);
 }

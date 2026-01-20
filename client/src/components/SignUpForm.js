@@ -21,7 +21,7 @@ template.innerHTML = /* html */ `
       .join('')}
 
     <p class="errorMessage" hidden="true"></p>
-    <button class="md" type="submit">Sign up</button>
+    <button type="submit">Sign up</button>
   </form>
 `
 

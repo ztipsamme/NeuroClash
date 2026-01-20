@@ -4,49 +4,51 @@
 h1,
 h1 > strong,
 .logo {
-  background: var(--color-secondary-gradient);
+  --color-base: var(--color-secondary);
+
+  background: var(--color-gradient);
   background-clip: text;
   font-size: 2.5rem;
   margin-bottom: var(--lg);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  font-weight: var(--font-weight-bolder);
+  font-weight: var(--font-bolder);
 }
 
 h1:has(strong) {
   background: none;
-  font-weight: var(--font-weight-bold);
+  font-weight: var(--font-bold);
   -webkit-text-fill-color: currentColor;
 }
 
 h2 {
   font-size: 2rem;
   margin-bottom: var(--md);
-  font-weight: var(--font-weight-bold);
+  font-weight: var(--font-bold);
 }
 
 h3 {
   font-size: 1.5rem;
   margin-bottom: var(--sm);
-  font-weight: var(--font-weight-medium);
+  font-weight: var(--font-medium);
 }
 
 h4 {
   font-size: 1.25rem;
   margin-bottom: var(--sm);
-  font-weight: var(--font-weight-medium);
+  font-weight: var(--font-medium);
 }
 
 h5 {
   font-size: 1rem;
   margin-bottom: var(--xs);
-  font-weight: var(--font-weight-medium);
+  font-weight: var(--font-medium);
 }
 
 h6 {
   font-size: 0.875rem;
   margin-bottom: var(--xs);
-  font-weight: var(--font-weight-medium);
+  font-weight: var(--font-medium);
 }
 
 strong {
@@ -56,5 +58,5 @@ strong {
 .logo {
   font-size: 2rem;
   margin-bottom: 0;
-  padding: var(--padding-sm);
+  padding: var(--p-sm);
 }

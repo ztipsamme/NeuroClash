@@ -1,0 +1,100 @@
+@import './colors.css';
+@import './sizes.css';
+
+/* colors */
+a,
+button,
+a.button {
+  --color: var(--color-bright-snow);
+  --bg: var(--color-gradient);
+  --bg-hover: var(--color-gradient-dark);
+  --shadow: var(--color-base);
+  --weight: var(--font-bold);
+}
+
+/* === Links === */
+
+a {
+  --color: var(--color-base);
+  color: var(--color);
+  font-weight: var(--weight);
+}
+
+a:hover {
+  --color: var(--color-dark);
+}
+
+a.secondary:hover {
+  --color: var(--color-light);
+}
+
+/* === Buttons === */
+
+/* normal */
+
+button,
+a.button {
+  background: var(--bg);
+  border: transparent;
+  border-radius: var(--radius-sm);
+  color: var(--color-bright-snow);
+  cursor: pointer;
+  font-size: var(--text-sm);
+  font-weight: var(--weight);
+  padding: var(--p-sm);
+  text-decoration: none;
+  min-width: 4rem;
+}
+
+button:hover,
+a.button:hover {
+  background: var(--bg-hover);
+  box-shadow: 0 4px 8px var(--shadow);
+  cursor: pointer;
+}
+
+/* ghost */
+
+.ghost,
+a.ghost {
+  --border-edge: 2px;
+  --radius: var(--radius-sm);
+
+  font-weight: var(--weight);
+  position: relative;
+  background-clip: text;
+  box-decoration-break: clone;
+  -webkit-background-clip: text;
+  -webkit-box-decoration-break: clone;
+  -webkit-text-fill-color: rgba(0, 0, 0, 0);
+}
+
+.ghost::before,
+.ghost::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  background: var(--bg-hover);
+  border-radius: var(--radius);
+  inset: 0;
+}
+
+.ghost::after {
+  background: var(--color-bright-snow);
+  border-radius: calc(var(--radius) - var(--border-edge));
+  height: calc(100% - (var(--border-edge) * 2));
+  left: var(--border-edge);
+  top: var(--border-edge);
+  width: calc(100% - (var(--border-edge) * 2));
+}
+
+.ghost::after:is(:hover, :focus-visible),
+.ghost.active::after {
+  background-color: transparent;
+}
+
+.ghost:hover,
+.ghost.active {
+  font-weight: var(--weight);
+  -webkit-text-fill-color: var(--color-bright-snow);
+}

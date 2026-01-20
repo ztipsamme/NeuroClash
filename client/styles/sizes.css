@@ -1,41 +1,47 @@
 :root {
+  --3xxs: 4px;
+  --xxs: 8px;
+  --xs: 10px;
+  --sm: 12px;
+  --md: 14px;
+  --lg: 16px;
+  --xl: 18px;
+  --2xl: 20px;
+  --3xl: 24px;
+  --4xl: 32px;
+}
+
+:root {
   /* Border */
-  --border-radius-sm: 4px;
-  --border-radius-md: 8px;
-  --border-radius-lg: 16px;
+  --radius-sm: var(--3xxs);
+  --radius-md: var(--xxs);
+  --radius-lg: var(--lg);
 
   /* Font Sizes */
-  --font-size-xs: 12px;
-  --font-size-sm: 14px;
-  --font-size-md: 16px;
-  --font-size-lg: 18px;
-  --font-size-xl: 20px;
+  --text-xs: var(--xs);
+  --text-sm: var(--sm);
+  --text-base: var(--md);
+  --text-lg: var(--xl);
+  --text-xl: var(--2xl);
 
   /* Font-Weights */
-  --font-weight-light: 300;
-  --font-weight-normal: 400;
-  --font-weight-medium: 500;
-  --font-weight-bold: 700;
-  --font-weight-bolder: 900;
-
-  /* Sizes */
-  --xs: 4px;
-  --sm: 8px;
-  --md: 16px;
-  --lg: 24px;
-  --xl: 32px;
+  --font-light: 300;
+  --font-normal: 400;
+  --font-medium: 500;
+  --font-bold: 700;
+  --font-bolder: 900;
 }
 
 :root {
   /* Padding */
-  --padding-xs: var(--xs) var(--sm);
-  --padding-sm: var(--sm) var(--md);
-  --padding-md: var(--md) var(--lg);
-  --padding-lg: var(--lg) var(--xl);
+  --p-xxs: var(--3xxs) var(--xxs);
+  --p-sm: var(--xxs) var(--lg);
+  --p-md: var(--lg) var(--3xl);
+  --p-3xl: var(--lg) var(--4xl);
 
   /* Spacing */
-  --spacing-xs: var(--xs) var(--sm);
-  --spacing-sm: var(--sm) var(--md);
-  --spacing-md: var(--md) var(--lg);
-  --spacing-lg: var(--lg) var(--xl);
+  --spacing-xs: var(--3xxs) var(--xxs);
+  --spacing-sm: var(--xxs) var(--lg);
+  --spacing-md: var(--lg) var(--3xl);
+  --spacing-3xl: var(--3xl) var(--4xl);
 }

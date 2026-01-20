@@ -13,7 +13,7 @@ template.innerHTML = /* html */ `
     <input type="text" name="password" placeholder="Password"/>
 
     <p class="errorMessage" hidden="true"></p>
-    <button class="lg" type="submit">Sign in</button>
+    <button type="submit">Sign in</button>
   </form>
 `
 

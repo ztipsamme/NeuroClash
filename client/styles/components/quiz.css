@@ -8,17 +8,15 @@
 }
 
 button.answer.correct {
-  --gradient: var(--color-success-gradient);
-  --shadow: var(--color-success);
+  --color-base: var(--color-success);
 }
 
 button.answer.incorrect {
-  --gradient: var(--color-danger-gradient);
-  --shadow: var(--color-danger);
+  --color-base: var(--color-danger);
 }
 
 button:not(.ghost).answer.correct,
 button.answer.incorrect {
   font-weight: var(--font-weight-bold);
-  background: var(--gradient);
+  background: var(--color-gradient);
 }

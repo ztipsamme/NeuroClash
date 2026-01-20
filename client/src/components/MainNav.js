@@ -30,12 +30,12 @@ export default class MainNav extends HTMLElement {
       {
         label: 'Sign In',
         path: '/sign-in',
-        classes: 'ghost secondary',
+        classes: 'button ghost secondary',
       },
       {
         label: 'Sign Up',
         path: '/sign-up',
-        classes: 'ghost',
+        classes: 'button ghost',
       },
     ]
 
@@ -44,7 +44,7 @@ export default class MainNav extends HTMLElement {
     if (isSignedIn()) {
       authNav.insertAdjacentHTML(
         'beforeend',
-        `<button class="md align-left ghost secondary">Sign Out</button>`
+        `<button class="ghost secondary">Sign Out</button>`
       )
     } else {
       authNav.innerHTML = this.renderLinks(authLinks, isCurrentPath)
@@ -56,7 +56,7 @@ export default class MainNav extends HTMLElement {
       .map(
         ({ label, icon, path, classes, hidden }) => /* html */ `
           <a href="${path}" data-link
-             class="${isCurrentPath(path)} ${classes || ''}"
+             class="${isCurrentPath(path)} ${classes || 'secondary'}"
              hidden>
             ${icon ? `${icon} ` : ''}${label}
           </a>
