@@ -40,8 +40,9 @@
   --p-3xl: var(--lg) var(--4xl);
 
   /* Spacing */
-  --spacing-xs: var(--3xxs) var(--xxs);
-  --spacing-sm: var(--xxs) var(--lg);
-  --spacing-md: var(--lg) var(--3xl);
-  --spacing-3xl: var(--3xl) var(--4xl);
+  --spacing-xs: var(--3xxs);
+  --spacing-sm: var(--xxs);
+  --spacing-md: var(--lg);
+  --spacing-lg: var(--3xl);
+  --spacing-xl: var(--4xl);
 }

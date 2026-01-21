@@ -34,9 +34,6 @@ body {
   display: grid;
   grid-template-columns: 200px auto;
   min-height: 100vh;
-}
-
-.main-layout .content-wrapper {
   padding: var(--p-sm);
 }
 
@@ -55,4 +52,7 @@ body {
   justify-content: center;
   align-items: center;
   width: 100%;
+}
+.content-layout {
+  padding: 0px var(--sm);
 }

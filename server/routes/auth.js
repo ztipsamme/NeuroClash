@@ -81,7 +81,7 @@ router.post('/sign-up', async (req, res) => {
       password: hashedPassword,
     })
 
-    res.status(200).json({ message: 'User created' })
+    res.status(201).json({ message: 'User created' })
   } catch (error) {
     console.error(error)
     res.status(500).json({ message: 'Server error' })

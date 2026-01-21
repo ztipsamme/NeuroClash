@@ -15,7 +15,29 @@ export const getQuizById = async (id) =>
 const getQuizWithQuestionsById = async (id) =>
   await fetchData(`http://localhost:8000/quizzes/${id}/questions`)
 
-export const createQuiz = async (id) => {
+export const createQuiz = async (quiz) => {
+  try {
+    const res = await fetch('http://localhost:8000/quizzes/quiz', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(quiz),
+    })
+
+    let data
+    try {
+      data = await res.json()
+    } catch {
+      data = await res.text()
+    }
+
+    return { ok: res.ok, data }
+  } catch (err) {
+    console.error('Fetch failed', err)
+    return { ok: false, data: null, error: err.message }
+  }
+}
+
+export const createPlayableQuiz = async (id) => {
   const { Quiz, Questions } = await getQuizWithQuestionsById(id)
 
   if (!Questions || Questions.length === 0) {

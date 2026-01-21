@@ -1,0 +1,68 @@
+@import '../global.css';
+
+form,
+label,
+.input-container,
+.question-cards,
+#create-quiz-form-question {
+  display: flex;
+  flex-direction: column;
+}
+
+form {
+  gap: var(--spacing-xl);
+  max-width: unset;
+}
+
+.question-cards,
+#create-quiz-form-question {
+  gap: var(--spacing-md);
+}
+
+.card {
+  border-radius: var(--radius-md);
+  border: 2px solid var(--color-secondary);
+  padding: var(--p-md);
+  position: relative;
+  list-style: none;
+}
+
+fieldset {
+  display: flex;
+  flex-direction: column;
+  border: transparent;
+  gap: var(--spacing-md);
+}
+
+legend {
+  font-size: var(--text-xl);
+  font-weight: var(--font-bold);
+  float: left;
+  width: 100%;
+}
+
+.input-container {
+  gap: var(--spacing-sm);
+}
+
+label > :not(.description) {
+  font-weight: var(--font-bold);
+}
+
+.delete-quiz-button {
+  --color-base: var(--color-secondary);
+
+  border-radius: 0 var(--radius-sm) 0 var(--radius-sm);
+  font-size: var(--text-xs);
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.delete-quiz-button:not(:disabled):hover {
+  --color-base: var(--color-danger);
+}
+
+#add-btn {
+  align-self: flex-start;
+}

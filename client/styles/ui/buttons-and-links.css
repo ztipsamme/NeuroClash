@@ -7,9 +7,19 @@ button,
 a.button {
   --color: var(--color-bright-snow);
   --bg: var(--color-gradient);
-  --bg-hover: var(--color-gradient-dark);
+  --bg-hover: var(--color-gradient);
   --shadow: var(--color-base);
   --weight: var(--font-bold);
+}
+
+a:disabled,
+button:disabled,
+a.button:disabled {
+  --color-base: var(--color-disabled);
+  &:hover {
+    cursor: not-allowed;
+    box-shadow: none;
+  }
 }
 
 /* === Links === */

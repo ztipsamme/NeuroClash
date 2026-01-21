@@ -13,6 +13,7 @@
   --color-secondary: var(--color-french-blue);
   --color-success: var(--color-light-green);
   --color-danger: var(--color-cherry-rose);
+  --color-disabled: hsl(from var(--color-graphite) h s calc(l + 30));
 
   --color-text-light: var(--color-graphite);
   --color-text-medium: hsl(from var(--color-graphite) h s calc(l + 30));

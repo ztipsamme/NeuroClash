@@ -1,4 +1,4 @@
-import { createQuiz, getQuizById } from '../services/quizService.js'
+import { createPlayableQuiz, getQuizById } from '../services/quizService.js'
 
 const landing = /*html*/ `
       <h1 id="quiz-title">Loading quiz...</h1>
@@ -68,7 +68,7 @@ const init = async (id) => {
 }
 
 const PlayQuiz = async (id) => {
-  const quiz = await createQuiz(id)
+  const quiz = await createPlayableQuiz(id)
   if (!quiz) return
 
   document.querySelector('#quiz-title').textContent = `Play Quiz: ${quiz.title}`

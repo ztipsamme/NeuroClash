@@ -26,3 +26,16 @@ export const ValidateBirthday = (birthday) => {
 
   return isValidDate && isReasonableYear
 }
+
+export const ValidateQuiz = ({ meta, questions }) => {
+  const metaValid = Object.values(meta).every((v) => v !== '' && v != null)
+
+  const questionsValid = questions.every((q) => {
+    if (!q.Statement || !q.Category || !q.Answers || q.Answers.length === 0)
+      return false
+
+    return q.Answers.every((a) => a.Text && typeof a.IsCorrect === 'boolean')
+  })
+
+  return metaValid && questionsValid
+}

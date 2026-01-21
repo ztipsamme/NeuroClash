@@ -24,7 +24,10 @@ export default class MainNav extends HTMLElement {
     const mainNav = this.shadowRoot.querySelector('#main-nav')
     const authNav = this.shadowRoot.querySelector('#auth-nav')
 
-    const mainLinks = [{ label: 'Home', icon: Icon('Home'), path: '/' }]
+    const mainLinks = [
+      { label: 'Home', icon: Icon('Home'), path: '/' },
+      { label: 'Create Quiz', icon: Icon('Home'), path: '/create-quiz' },
+    ]
 
     const authLinks = [
       {

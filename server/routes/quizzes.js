@@ -1,6 +1,8 @@
 import express from 'express'
 import { getCollection } from '../database.js'
 import { ObjectId } from 'mongodb'
+import { ValidateQuiz } from '../utils.js'
+import { client } from '../database.js'
 
 const router = express.Router()
 
@@ -93,6 +95,47 @@ router.get('/:id/questions', async (req, res) => {
   } catch (error) {
     console.error(error)
     res.status(500).json({ message: 'Server error' })
+  }
+})
+
+router.post('/quiz', async (req, res) => {
+  const { meta, questions } = req.body
+
+  const session = client.startSession()
+  const quizzesCollection = getCollection('quizzes')
+  const questionsCollection = getCollection('questions')
+
+  if (!meta || !questions) {
+    res.status(400).json({ message: 'Quiz data is missing' })
+    return
+  }
+
+  if (!ValidateQuiz({ meta, questions })) {
+    return res.status(400).json({ message: 'Please enter all details' })
+  }
+
+  try {
+    session.startTransaction()
+
+    const insertedQuestions = await questionsCollection.insertMany(questions, {
+      session,
+    })
+
+    const quiz = {
+      ...meta,
+      QuestionIds: Object.values(insertedQuestions.insertedIds),
+    }
+
+    await quizzesCollection.insertOne(quiz, { session })
+    await session.commitTransaction()
+
+    res.status(201).json({ message: 'Quiz created' })
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ message: 'Server error', error: error.message })
+    await session.abortTransaction()
+  } finally {
+    await session.endSession()
   }
 })
 
