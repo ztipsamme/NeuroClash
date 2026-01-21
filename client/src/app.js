@@ -4,7 +4,7 @@ import { initRouter } from './router/index.js'
 
 const initApp = async () => {
   initEvents()
-  initRouter()
+  await initRouter()
 }
 
 document.addEventListener('DOMContentLoaded', initApp())

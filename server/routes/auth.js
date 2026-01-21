@@ -8,6 +8,7 @@ import {
   ValidatePassword,
   ValidateUsername,
 } from '../utils.js'
+import { requireAuth } from '../middleware/auth.js'
 
 const router = express.Router()
 let SECRET = process.env.SECRET
@@ -103,12 +104,42 @@ router.post('/sign-in', async (req, res) => {
       return res.status(400).json({ message: 'Incorrect username or password' })
     }
 
-    const token = jwt.sign({ username }, SECRET, { expiresIn: '1h' })
-    res.status(200).json({ token })
+    const token = jwt.sign(
+      { userId: user._id, username: user.username },
+      SECRET,
+      { expiresIn: '1h' }
+    )
+
+    res.cookie('accessToken', token, {
+      httpOnly: true,
+      secure: false,
+      sameSite: 'lax',
+      path: '/',
+      maxAge: 15 * 60 * 1000,
+    })
+
+    res.status(200).json({ message: 'Signed in' })
   } catch (error) {
     console.error(error)
     return res.status(500).json({ message: 'Server error' })
   }
+})
+
+router.post('/sign-out', (req, res) => {
+  res.clearCookie('accessToken', {
+    httpOnly: true,
+    secure: false,
+    sameSite: 'lax',
+    path: '/',
+  })
+
+  res.status(200).json({ message: 'Signed out' })
+})
+
+router.get('/me', requireAuth, (req, res) => {
+  res.status(200).json({
+    user: req.user,
+  })
 })
 
 export default router

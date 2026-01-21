@@ -1,21 +1,23 @@
 import { render } from '../core/render.js'
-import { isSignedIn } from '../services/userService.js'
+import { getCurrentUser } from '../services/userService.js'
 import NotFound from '../views/NotFound.js'
 import { routes } from './routes.js'
 
-export function initRouter() {
+export async function initRouter() {
   window.addEventListener('popstate', handleRoute)
-  handleRoute()
+  await handleRoute()
 }
 
-function handleRoute() {
+async function handleRoute() {
   const path = window.location.pathname
 
   for (const route of routes) {
     const params = matchRoute(route.path, path)
 
     if (params) {
-      if (route.isProtected && !isSignedIn()) {
+      const user = await getCurrentUser()
+      console.log({ user: user })
+      if (route.isProtected && !user.ok) {
         navigate('/sign-in')
         return
       }

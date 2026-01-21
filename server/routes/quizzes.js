@@ -3,9 +3,11 @@ import { getCollection } from '../database.js'
 import { ObjectId } from 'mongodb'
 import { ValidateQuiz } from '../utils.js'
 import { client } from '../database.js'
+import { requireAuth } from '../middleware/auth.js'
 
 const router = express.Router()
 
+// PUBLIC
 router.get('/', async (req, res) => {
   try {
     const quizzesCollection = getCollection('quizzes')
@@ -14,8 +16,7 @@ router.get('/', async (req, res) => {
     const quizzes = await quizzesCollection.find({}).toArray()
     const users = await usersCollection.find({}).toArray()
 
-    const getUserById = (id) =>
-      users.find((u) => u._id.toString() === id.toString())
+    const getUserById = (id) => users.find((u) => u._id.toString() === id)
 
     const populatedQuizzes = quizzes.map((q) => ({
       ...q,
@@ -98,7 +99,8 @@ router.get('/:id/questions', async (req, res) => {
   }
 })
 
-router.post('/quiz', async (req, res) => {
+// PROTECTED
+router.post('/quiz', requireAuth, async (req, res) => {
   const { meta, questions } = req.body
 
   const session = client.startSession()

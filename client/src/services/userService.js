@@ -1,13 +1,10 @@
-export const isSignedIn = () => {
-  const token = localStorage.getItem('authToken')
-  if (!token) return false
+export const getCurrentUser = async () => {
+  const res = await fetch('http://localhost:8000/auth/me', {
+    credentials: 'include',
+  })
 
-  try {
-    const payload = JSON.parse(atob(token.split('.')[1]))
-    return payload.exp * 1000 > Date.now()
-  } catch (e) {
-    return false
-  }
+  const data = await res.json()
+  return { ok: res.ok, data }
 }
 
 export const createUser = async ({ username, email, birthday, password }) => {
@@ -26,25 +23,17 @@ export const signInUser = async ({ username, password }) => {
   const res = await fetch('http://localhost:8000/auth/sign-in', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
     body: JSON.stringify({ username, password }),
   })
 
   const data = await res.json()
-  const token = data.token
-
-  if (token) {
-    localStorage.setItem('authToken', token)
-  }
-
   return { ok: res.ok, data }
 }
 
-export const signOut = () => {
-  const token = localStorage.getItem('authToken')
-
-  if (token) {
-    localStorage.removeItem('authToken')
-  }
-
-  return true
+export const signOut = async () => {
+  await fetch('http://localhost:8000/auth/sign-out', {
+    method: 'POST',
+    credentials: 'include',
+  })
 }
