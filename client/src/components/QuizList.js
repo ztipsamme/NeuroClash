@@ -19,6 +19,8 @@ export default class QuizList extends HTMLElement {
 
   render(quizzes) {
     const container = this.shadowRoot.querySelector('.quiz-list')
+    const url = window.location.pathname.includes('/my-quizzes')
+
     container.innerHTML = quizzes
       .map(
         (q) => /* html */ `
@@ -26,8 +28,10 @@ export default class QuizList extends HTMLElement {
         title="${q.title}"
         description="${q.description}"
         category="${q.category}"
-        createdBy="${q.createdBy.username}"
-        url="/quiz/${q._id}">
+        createdBy="${q.createdBy ? q.createdBy.username : ''}"
+        url="${url ? `/my-quizzes/edit/${q._id}` : `/quiz/${q._id}`}"
+        link-text="${url ? 'Edit Quiz' : 'Play Quiz'}"
+        >
       </quiz-card>
     `
       )

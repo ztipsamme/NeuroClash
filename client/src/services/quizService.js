@@ -1,4 +1,5 @@
 import { navigate } from '../router/index.js'
+import { getCurrentUser } from './userService.js'
 
 const fetchData = async (path) => {
   const res = await fetch(path)
@@ -6,8 +7,26 @@ const fetchData = async (path) => {
   return data
 }
 
-export const getQuizzes = async () =>
-  await fetchData('http://localhost:8000/quizzes')
+export const getQuizzes = async () => {
+  const url = window.location.href.includes('/my-quizzes')
+
+  if (!url) {
+    return await fetchData('http://localhost:8000/quizzes')
+  }
+
+  const user = await getCurrentUser()
+  const userId = user.data.userId
+
+  const res = await fetch(
+    `http://localhost:8000/quizzes/my-quizzes/${userId}`,
+    {
+      credentials: 'include',
+    }
+  )
+
+  const data = await res.json()
+  return data
+}
 
 export const getQuizById = async (id) =>
   await fetchData(`http://localhost:8000/quizzes/${id}`)

@@ -26,7 +26,7 @@ export default class MainNav extends HTMLElement {
 
     this.mainLinks = [
       { label: 'Home', icon: Icon('Home'), path: '/' },
-      { label: 'Create Quiz', icon: Icon('Home'), path: '/create-quiz' },
+      { label: 'My Quizzes', icon: Icon('Home'), path: '/my-quizzes' },
     ]
 
     this.authLinks = [

@@ -1,9 +1,8 @@
 import express from 'express'
-import { getCollection } from '../database.js'
 import { ObjectId } from 'mongodb'
-import { ValidateQuiz } from '../utils.js'
-import { client } from '../database.js'
+import { client, getCollection } from '../database.js'
 import { requireAuth } from '../middleware/auth.js'
+import { ValidateQuiz } from '../utils.js'
 
 const router = express.Router()
 
@@ -100,6 +99,25 @@ router.get('/:id/questions', async (req, res) => {
 })
 
 // PROTECTED
+router.get('/my-quizzes/:userId', requireAuth, async (req, res) => {
+  const { userId } = req.params
+
+  try {
+    const quizzesCollection = getCollection('quizzes')
+    const quizzes = await quizzesCollection.find({}).toArray()
+    const usersQuizzes = quizzes.filter(
+      (q) => q.createdBy.toString() === userId
+    )
+
+    const omittedQuizzes = usersQuizzes.map(({ createdBy, ...p }) => p)
+
+    res.status(200).json(omittedQuizzes)
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ message: 'Server error' })
+  }
+})
+
 router.post('/quiz', requireAuth, async (req, res) => {
   const { meta, questions } = req.body
 

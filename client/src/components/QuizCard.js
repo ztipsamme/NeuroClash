@@ -28,6 +28,7 @@ export default class QuizCard extends HTMLElement {
       { selector: '.quiz-description', attribute: 'description' },
       { selector: '.quiz-created-by', attribute: 'createdBy' },
       { selector: '.quiz-link', attribute: 'url', prop: 'href' },
+      { selector: '.quiz-link', attribute: 'link-text' },
     ]
 
     content.forEach(({ selector, attribute, prop }) => {

@@ -1,5 +1,6 @@
 import CreateQuiz from '../views/CreateQuiz.js'
 import Home from '../views/Home.js'
+import MyQuizzes from '../views/MyQuizzes.js'
 import Quiz from '../views/Quiz.js'
 import QuizResult from '../views/QuizResult.js'
 import SignIn from '../views/SignIn.js'
@@ -12,7 +13,12 @@ export const routes = [
     isProtected: true,
   },
   {
-    path: '/create-quiz',
+    path: '/my-quizzes',
+    view: MyQuizzes,
+    isProtected: true,
+  },
+  {
+    path: '/my-quizzes/create-quiz',
     view: CreateQuiz,
     isProtected: true,
   },
