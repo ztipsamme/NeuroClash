@@ -1,5 +1,6 @@
 import { createQuiz } from '../services/quizService.js'
 import { navigate } from '../router/index.js'
+import { getCurrentUser } from '../services/userService.js'
 
 const inputField = ({ label, name, description, value = '' }) => /* html */ `
             <label for="${name}">
@@ -11,6 +12,11 @@ const inputField = ({ label, name, description, value = '' }) => /* html */ `
 
 const metaDataFields = [
   { label: 'Title', name: 'title', description: 'Give your quiz a title.' },
+  {
+    label: 'Description',
+    name: 'description',
+    description: 'Describe what your quiz is about.',
+  },
   {
     label: 'Category',
     name: 'category',
@@ -147,10 +153,16 @@ const init = async () => {
     e.preventDefault()
 
     const formData = new FormData(form)
+    const user = await getCurrentUser()
+
+    if (!user.data) return
+    const userId = user.data.userId
 
     const meta = {
-      Title: formData.get('title'),
-      Category: formData.get('category'),
+      title: formData.get('title'),
+      category: formData.get('category'),
+      description: formData.get('description'),
+      createdBy: userId,
     }
 
     const cards = Array.from(questionCards.querySelectorAll('.card'))
@@ -158,22 +170,23 @@ const init = async () => {
     const questions = cards.map((card) => {
       const incorrectAnswers = card.querySelectorAll('input[name="incorrect"]')
 
-      const Statement = card.querySelector('input[name="statement"]').value
-      const Answers = [
+      const statement = card.querySelector('input[name="statement"]').value
+      const answers = [
         {
-          Text: card.querySelector('input[name="correct"]').value,
-          IsCorrect: true,
+          text: card.querySelector('input[name="correct"]').value,
+          isCorrect: true,
         },
         ...Array.from(incorrectAnswers).map((input) => ({
-          Text: input.value,
-          IsCorrect: false,
+          text: input.value,
+          isCorrect: false,
         })),
       ]
 
       return {
-        Statement,
-        Category: formData.get('category'),
-        Answers,
+        statement: statement,
+        category: formData.get('category'),
+        answers,
+        createdBy: userId,
       }
     })
 
@@ -193,7 +206,7 @@ const init = async () => {
 
       navigate('/')
     } catch (error) {
-      console.log('Server error: ' + error.message)
+      errMessage.textContent = 'Server error: ' + error.message
     }
   })
 }

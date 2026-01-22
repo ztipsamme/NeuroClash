@@ -29,7 +29,7 @@ const init = async (id) => {
     const quiz = await getQuizById(id)
     const result = await getQuizResult(id)
 
-    document.querySelector('#quiz-title').textContent = `Result: ${quiz.Title}`
+    document.querySelector('#quiz-title').textContent = `Result: ${quiz.title}`
 
     document.querySelector('#quiz-time').textContent = result.totalTimePlayed
     document.querySelector('#quiz-correct').textContent = result.correctAnswers

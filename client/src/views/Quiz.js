@@ -5,17 +5,6 @@ const landing = /*html*/ `
       <p id="quiz-description"></p>
       <p id="quiz-meta"></p>
       <button id="play-quiz" class="sm">Start Quiz</button>
-      <div>
-        <button class="button ">primary</button>
-        <button class="button primary">primary</button>
-        <button class="button secondary">secondary</button>
-        <button class="button success">success</button>
-        <button class="button danger">danger</button>
-        <button class="button ghost">ghost</button>
-        <a href="#" class="button">a</>
-        <a href="#" class="button ghost">a ghost</>
-        <a href="#" class="">link</>
-      <div>
       `
 
 const play = /*html*/ `
@@ -53,10 +42,10 @@ const init = async (id) => {
     const quizView = document.querySelector('#quiz-view')
     quizView.innerHTML = landing
 
-    document.querySelector('#quiz-title').textContent = `Landing: ${quiz.Title}`
-    document.querySelector('#quiz-description').textContent = quiz.Description
+    document.querySelector('#quiz-title').textContent = `Landing: ${quiz.title}`
+    document.querySelector('#quiz-description').textContent = quiz.description
     document.querySelector('#quiz-meta').textContent =
-      `Created by ${quiz.CreatedBy.Username}`
+      `Created by ${quiz.createdBy.username}`
 
     document.querySelector('#play-quiz').addEventListener('click', () => {
       quizView.innerHTML = play
@@ -84,11 +73,13 @@ const PlayQuiz = async (id) => {
 
     if (!currentQuestion) return
 
-    statementEl.textContent = currentQuestion.Statement
-    answers.innerHTML = currentQuestion.Answers.map(
-      (answer, idx) =>
-        `<button type="button" data-index="${idx}" class="answer ghost">${answer.Text}</button>`
-    ).join('')
+    statementEl.textContent = currentQuestion.statement
+    answers.innerHTML = currentQuestion.answers
+      .map(
+        (answer, idx) =>
+          `<button type="button" data-index="${idx}" class="answer ghost">${answer.text}</button>`
+      )
+      .join('')
 
     quiz.startTimer(
       (seconds) => (timer.textContent = `Time: ${seconds}s`),
@@ -108,12 +99,12 @@ const PlayQuiz = async (id) => {
   const lockAndResolveQuestion = (clickedBtn = null) => {
     quiz.stopTimer?.()
 
-    const correctIdx = currentQuestion.Answers.findIndex((a) => a.IsCorrect)
+    const correctIdx = currentQuestion.answers.findIndex((a) => a.isCorrect)
     const buttons = answers.querySelectorAll('button')
     const correctBtn = buttons[correctIdx]
 
     if (clickedBtn) {
-      const isCorrect = quiz.IsCorrect(Number(clickedBtn.dataset.index))
+      const isCorrect = quiz.isCorrect(Number(clickedBtn.dataset.index))
       clickedBtn.classList.add(isCorrect ? 'correct' : 'incorrect')
       clickedBtn.classList.remove('ghost')
       correctBtn.classList.add('correct')

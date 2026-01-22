@@ -20,3 +20,7 @@ button.answer.incorrect {
   font-weight: var(--font-weight-bold);
   background: var(--color-gradient);
 }
+
+button:disabled {
+  --color-base: var(--color-primary);
+}

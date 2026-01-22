@@ -16,7 +16,6 @@ async function handleRoute() {
 
     if (params) {
       const user = await getCurrentUser()
-      console.log({ user: user })
       if (route.isProtected && !user.ok) {
         navigate('/sign-in')
         return

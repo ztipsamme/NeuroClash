@@ -20,7 +20,7 @@ router.get('/', async (req, res) => {
 
     const populatedQuizzes = quizzes.map((q) => ({
       ...q,
-      CreatedBy: getUserById(q.CreatedBy),
+      createdBy: getUserById(q.createdBy),
     }))
 
     res.status(200).json(populatedQuizzes)
@@ -44,14 +44,14 @@ router.get('/:id', async (req, res) => {
     if (!quiz) res.status(400).json({ message: 'Quiz not found' })
 
     const creator = await usersCollection.findOne({
-      _id: new ObjectId(quiz.CreatedBy),
+      _id: new ObjectId(quiz.createdBy),
     })
 
     if (!creator) res.status(400).json({ message: 'Quiz creator not found' })
 
     const populatedQuiz = {
       ...quiz,
-      CreatedBy: creator,
+      createdBy: creator,
     }
 
     res.status(200).json(populatedQuiz)
@@ -75,7 +75,7 @@ router.get('/:id/questions', async (req, res) => {
     if (!quiz) res.status(400).json({ message: 'Quiz not found' })
 
     const questions = await Promise.all(
-      quiz.QuestionIds.map(
+      quiz.questionIds.map(
         async (id) =>
           await questionsCollection.findOne({
             _id: new ObjectId(id),
@@ -87,11 +87,11 @@ router.get('/:id/questions', async (req, res) => {
       res.status(400).json({ message: 'Quiz questions not found' })
 
     res.status(200).json({
-      Quiz: {
+      quiz: {
         _id: quiz._id,
-        Title: quiz.Title,
+        title: quiz.title,
       },
-      Questions: questions,
+      questions: questions,
     })
   } catch (error) {
     console.error(error)
@@ -125,7 +125,7 @@ router.post('/quiz', requireAuth, async (req, res) => {
 
     const quiz = {
       ...meta,
-      QuestionIds: Object.values(insertedQuestions.insertedIds),
+      questionIds: Object.values(insertedQuestions.insertedIds),
     }
 
     await quizzesCollection.insertOne(quiz, { session })

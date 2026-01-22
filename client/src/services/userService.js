@@ -4,7 +4,7 @@ export const getCurrentUser = async () => {
   })
 
   const data = await res.json()
-  return { ok: res.ok, data }
+  return { ok: res.ok, data: data.user }
 }
 
 export const createUser = async ({ username, email, birthday, password }) => {

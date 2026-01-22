@@ -23,10 +23,10 @@ export default class QuizList extends HTMLElement {
       .map(
         (q) => /* html */ `
       <quiz-card
-        title="${q.Title}"
-        description="${q.Description}"
-        category="${q.Category}"
-        created-by="${q.CreatedBy.Username}"
+        title="${q.title}"
+        description="${q.description}"
+        category="${q.category}"
+        createdBy="${q.createdBy.username}"
         url="/quiz/${q._id}">
       </quiz-card>
     `

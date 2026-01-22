@@ -20,6 +20,7 @@ export const createQuiz = async (quiz) => {
     const res = await fetch('http://localhost:8000/quizzes/quiz', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
       body: JSON.stringify(quiz),
     })
 
@@ -38,13 +39,13 @@ export const createQuiz = async (quiz) => {
 }
 
 export const createPlayableQuiz = async (id) => {
-  const { Quiz, Questions } = await getQuizWithQuestionsById(id)
+  const { quiz, questions } = await getQuizWithQuestionsById(id)
 
-  if (!Questions || Questions.length === 0) {
+  if (!questions || questions.length === 0) {
     throw new Error('Quiz has no questions')
   }
 
-  const qLength = Questions.length
+  const qLength = questions.length
   const timePerQuestion = 10
   let currentQuestionIdx = 0
   let correctAnswers = 0
@@ -67,9 +68,9 @@ export const createPlayableQuiz = async (id) => {
     return arr
   }
 
-  const shuffledQuestions = shuffle(Questions).map((q) => ({
+  const shuffledQuestions = shuffle(questions).map((q) => ({
     ...q,
-    Answers: shuffle(q.Answers),
+    answers: shuffle(q.answers),
   }))
 
   const getCurrentQuestion = () => shuffledQuestions[currentQuestionIdx]
@@ -102,9 +103,9 @@ export const createPlayableQuiz = async (id) => {
     const question = getCurrentQuestion()
 
     const answer =
-      answerIdx !== null ? question.Answers[answerIdx] : { IsCorrect: false }
+      answerIdx !== null ? question.answers[answerIdx] : { isCorrect: false }
 
-    if (answer.IsCorrect) {
+    if (answer.isCorrect) {
       correctAnswers++
       return true
     } else {
@@ -131,9 +132,9 @@ export const createPlayableQuiz = async (id) => {
   }
 
   return {
-    title: Quiz.Title,
+    title: quiz.title,
     getCurrentQuestion,
-    IsCorrect: isCorrect,
+    isCorrect: isCorrect,
     result,
     startTimer,
     stopTimer,
