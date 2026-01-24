@@ -29,10 +29,10 @@ export const getQuizzes = async () => {
 }
 
 export const getQuizById = async (id) =>
-  await fetchData(`http://localhost:8000/quizzes/${id}`)
+  await fetchData(`http://localhost:8000/quizzes/quiz-meta/${id}`)
 
-const getQuizWithQuestionsById = async (id) =>
-  await fetchData(`http://localhost:8000/quizzes/${id}/questions`)
+export const getQuizWithQuestionsById = async (id) =>
+  await fetchData(`http://localhost:8000/quizzes/full-quiz/${id}`)
 
 export const createQuiz = async (quiz) => {
   try {
@@ -51,16 +51,68 @@ export const createQuiz = async (quiz) => {
     }
 
     return { ok: res.ok, data }
-  } catch (err) {
-    console.error('Fetch failed', err)
-    return { ok: false, data: null, error: err.message }
+  } catch (error) {
+    console.error('Fetch failed', error)
+    return { ok: false, data: null, error: error.message }
+  }
+}
+
+export const updateQuiz = async (quiz) => {
+  const id = quiz.meta._id
+
+  try {
+    const res = await fetch(`http://localhost:8000/quizzes/quiz/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify(quiz),
+    })
+
+    let data
+    try {
+      data = await res.json()
+    } catch {
+      data = await res.text()
+    }
+
+    return { ok: res.ok, data }
+  } catch (error) {
+    console.error('Fetch failed', error)
+    return { ok: false, data: null, error: error.message }
+  }
+}
+
+export const deleteQuiz = async (id) => {
+  try {
+    const res = await fetch(`http://localhost:8000/quizzes/quiz/${id}`, {
+      method: 'DELETE',
+      credentials: 'include',
+    })
+
+    let data
+    try {
+      data = await res.json()
+    } catch {
+      data = await res.text()
+    }
+
+    return { ok: res.ok, data }
+  } catch (error) {
+    console.error('Fetch failed', error)
+    return { ok: false, data: null, error: error.message }
   }
 }
 
 export const createPlayableQuiz = async (id) => {
-  const { quiz, questions } = await getQuizWithQuestionsById(id)
+  const quiz = await getQuizWithQuestionsById(id)
 
-  if (!questions || questions.length === 0) {
+  if (!quiz) {
+    throw new Error('Quiz not found')
+  }
+
+  const questions = quiz.questions
+
+  if (questions.length === 0) {
     throw new Error('Quiz has no questions')
   }
 

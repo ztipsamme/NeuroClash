@@ -49,7 +49,7 @@ label > :not(.description) {
   font-weight: var(--font-bold);
 }
 
-.delete-quiz-button {
+.delete-question-button {
   --color-base: var(--color-secondary);
 
   border-radius: 0 var(--radius-sm) 0 var(--radius-sm);
@@ -59,7 +59,7 @@ label > :not(.description) {
   right: 0;
 }
 
-.delete-quiz-button:not(:disabled):hover {
+.delete-question-button:not(:disabled):hover {
   --color-base: var(--color-danger);
 }
 

@@ -23,7 +23,7 @@ export default function Quiz({ id }) {
     const link = document.createElement('link')
     link.id = 'quiz-css'
     link.rel = 'stylesheet'
-    link.href = '/styles/components/quiz.css' // sökväg till din CSS-fil
+    link.href = '/styles/components/quiz.css'
     document.head.appendChild(link)
   }
 

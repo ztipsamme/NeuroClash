@@ -31,13 +31,7 @@ export const ValidateQuiz = ({ meta, questions }) => {
   const metaValid = Object.values(meta).every((v) => v !== '' && v != null)
 
   const questionsValid = questions.every((q) => {
-    if (
-      !q.statement ||
-      !q.category ||
-      !q.answers ||
-      !q.createdBy ||
-      q.answers.length === 0
-    )
+    if (!q.statement || !q.category || !q.answers || q.answers.length === 0)
       return false
 
     return q.answers.every((a) => a.text && typeof a.isCorrect === 'boolean')

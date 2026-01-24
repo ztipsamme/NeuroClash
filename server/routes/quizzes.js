@@ -6,6 +6,19 @@ import { ValidateQuiz } from '../utils.js'
 
 const router = express.Router()
 
+const getQuiz = async (quizId) => {
+  const quizzesCollection = getCollection('quizzes')
+  return await quizzesCollection.findOne({
+    _id: new ObjectId(quizId),
+  })
+}
+const getCreator = async (creatorId) => {
+  const usersCollection = getCollection('users')
+  return await usersCollection.findOne({
+    _id: new ObjectId(creatorId),
+  })
+}
+
 // PUBLIC
 router.get('/', async (req, res) => {
   try {
@@ -29,23 +42,14 @@ router.get('/', async (req, res) => {
   }
 })
 
-router.get('/:id', async (req, res) => {
+router.get('/quiz-meta/:id', async (req, res) => {
   const { id } = req.params
 
   try {
-    const quizzesCollection = getCollection('quizzes')
-    const usersCollection = getCollection('users')
-
-    const quiz = await quizzesCollection.findOne({
-      _id: new ObjectId(id),
-    })
-
+    const quiz = await getQuiz(id)
     if (!quiz) res.status(400).json({ message: 'Quiz not found' })
 
-    const creator = await usersCollection.findOne({
-      _id: new ObjectId(quiz.createdBy),
-    })
-
+    const creator = await getCreator(quiz.createdBy)
     if (!creator) res.status(400).json({ message: 'Quiz creator not found' })
 
     const populatedQuiz = {
@@ -60,24 +64,22 @@ router.get('/:id', async (req, res) => {
   }
 })
 
-router.get('/:id/questions', async (req, res) => {
+router.get('/full-quiz/:id', async (req, res) => {
   const { id } = req.params
 
   try {
-    const quizzesCollection = getCollection('quizzes')
-    const questionsCollection = getCollection('questions')
-
-    const quiz = await quizzesCollection.findOne({
-      _id: new ObjectId(id),
-    })
-
+    const quiz = await getQuiz(id)
     if (!quiz) res.status(400).json({ message: 'Quiz not found' })
 
+    const creator = await getCreator(quiz.createdBy)
+    if (!creator) res.status(400).json({ message: 'Quiz creator not found' })
+
+    const questionsCollection = getCollection('questions')
     const questions = await Promise.all(
       quiz.questionIds.map(
-        async (id) =>
+        async (questionIds) =>
           await questionsCollection.findOne({
-            _id: new ObjectId(id),
+            _id: new ObjectId(questionIds),
           })
       )
     )
@@ -85,11 +87,11 @@ router.get('/:id/questions', async (req, res) => {
     if (!questions)
       res.status(400).json({ message: 'Quiz questions not found' })
 
+    const { questionIds, ...quizRest } = quiz
+
     res.status(200).json({
-      quiz: {
-        _id: quiz._id,
-        title: quiz.title,
-      },
+      ...quizRest,
+      createdBy: creator,
       questions: questions,
     })
   } catch (error) {
@@ -150,6 +152,134 @@ router.post('/quiz', requireAuth, async (req, res) => {
     await session.commitTransaction()
 
     res.status(201).json({ message: 'Quiz created' })
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ message: 'Server error', error: error.message })
+    await session.abortTransaction()
+  } finally {
+    await session.endSession()
+  }
+})
+
+router.put('/quiz/:id', requireAuth, async (req, res) => {
+  const { id } = req.params
+  const { meta, questions, deletedQuestionIds } = req.body
+
+  const quiz = getQuiz(id)
+
+  if (!quiz) {
+    res.status(400).json({ message: 'Quiz not found' })
+    return
+  }
+
+  if (!meta || !questions || !deletedQuestionIds) {
+    res.status(400).json({ message: 'Quiz data is missing' })
+    return
+  }
+
+  if (!ValidateQuiz({ meta, questions })) {
+    return res.status(400).json({ message: 'Please enter all details' })
+  }
+
+  const session = client.startSession()
+  const quizzesCollection = getCollection('quizzes')
+  const questionsCollection = getCollection('questions')
+
+  try {
+    session.startTransaction()
+
+    const existingQuestions = questions.filter((q) => q._id)
+    const newQuestions = questions.filter((q) => !q._id)
+
+    const updates = existingQuestions
+      .filter((q) => q._id)
+      .map((q) => ({
+        updateOne: {
+          filter: { _id: new ObjectId(q._id) },
+          update: {
+            $set: {
+              statement: q.statement,
+              category: q.category,
+              answers: q.answers,
+            },
+          },
+        },
+      }))
+
+    if (updates.length) {
+      await questionsCollection.bulkWrite(updates, { session })
+    }
+
+    const inserted = newQuestions.length
+      ? await questionsCollection.insertMany(newQuestions, { session })
+      : { insertedIds: {} }
+
+    if (deletedQuestionIds.length) {
+      await questionsCollection.deleteMany(
+        {
+          _id: { $in: deletedQuestionIds.map((id) => new ObjectId(id)) },
+        },
+        { session }
+      )
+    }
+
+    const existingIds = existingQuestions.map((q) => new ObjectId(q._id))
+    const newIds = Object.values(inserted.insertedIds)
+
+    await quizzesCollection.updateOne(
+      { _id: new ObjectId(meta._id) },
+      {
+        $set: {
+          title: meta.title,
+          description: meta.description,
+          category: meta.category,
+          questionIds: [...existingIds, ...newIds],
+        },
+      },
+      { session }
+    )
+
+    await session.commitTransaction()
+    res.status(200).json({ message: 'Quiz updated' })
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ message: 'Server error', error: error.message })
+    await session.abortTransaction()
+  } finally {
+    await session.endSession()
+  }
+})
+
+router.delete('/quiz/:id', requireAuth, async (req, res) => {
+  const { id } = req.params
+
+  const session = client.startSession()
+  const quizzesCollection = getCollection('quizzes')
+  const questionsCollection = getCollection('questions')
+
+  try {
+    session.startTransaction()
+
+    const quiz = await getQuiz(id)
+
+    if (!quiz) {
+      await session.abortTransaction()
+      res.status(400).json({ message: 'Quiz not found' })
+      return
+    }
+
+    if (quiz.questionIds.length) {
+      await questionsCollection.deleteMany(
+        {
+          _id: { $in: quiz.questionIds.map((id) => new ObjectId(id)) },
+        },
+        { session }
+      )
+    }
+
+    await quizzesCollection.deleteOne({ _id: new ObjectId(id) }, { session })
+    await session.commitTransaction()
+    res.status(200).json({ message: 'Quiz updated' })
   } catch (error) {
     console.error(error)
     res.status(500).json({ message: 'Server error', error: error.message })
