@@ -66,3 +66,8 @@ label > :not(.description) {
 #add-btn {
   align-self: flex-start;
 }
+
+.delete-quiz-button {
+  margin-top: var(--spacing-xl);
+  float: right;
+}

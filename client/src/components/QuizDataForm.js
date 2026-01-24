@@ -29,7 +29,7 @@ export default class QuizDataForm extends HTMLElement {
   constructor() {
     super()
     WebComponentConstructorBase(this, template, [
-      '/styles/components/create-quiz.css',
+      '/styles/components/quiz-form.css',
     ])
     this.deletedQuestionIds = []
   }

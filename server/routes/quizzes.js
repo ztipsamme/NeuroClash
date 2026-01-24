@@ -2,7 +2,7 @@ import express from 'express'
 import { ObjectId } from 'mongodb'
 import { client, getCollection } from '../database.js'
 import { requireAuth } from '../middleware/auth.js'
-import { ValidateQuiz } from '../utils.js'
+import { ValidateCreator, ValidateQuiz } from '../utils.js'
 
 const router = express.Router()
 
@@ -165,11 +165,15 @@ router.put('/quiz/:id', requireAuth, async (req, res) => {
   const { id } = req.params
   const { meta, questions, deletedQuestionIds } = req.body
 
-  const quiz = getQuiz(id)
+  const quiz = await getQuiz(id)
 
   if (!quiz) {
     res.status(400).json({ message: 'Quiz not found' })
     return
+  }
+
+  if (!ValidateCreator(quiz.createdBy, req)) {
+    return res.status(403).json({ message: 'Not allowed to update this quiz' })
   }
 
   if (!meta || !questions || !deletedQuestionIds) {
@@ -257,16 +261,19 @@ router.delete('/quiz/:id', requireAuth, async (req, res) => {
   const quizzesCollection = getCollection('quizzes')
   const questionsCollection = getCollection('questions')
 
+  const quiz = await getQuiz(id)
+
+  if (!quiz) {
+    res.status(400).json({ message: 'Quiz not found' })
+    return
+  }
+
+  if (!ValidateCreator(quiz.createdBy, req)) {
+    return res.status(403).json({ message: 'Not allowed to delete this quiz' })
+  }
+
   try {
     session.startTransaction()
-
-    const quiz = await getQuiz(id)
-
-    if (!quiz) {
-      await session.abortTransaction()
-      res.status(400).json({ message: 'Quiz not found' })
-      return
-    }
 
     if (quiz.questionIds.length) {
       await questionsCollection.deleteMany(

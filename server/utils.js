@@ -39,3 +39,6 @@ export const ValidateQuiz = ({ meta, questions }) => {
 
   return metaValid && questionsValid
 }
+
+export const ValidateCreator = (createdById, req) =>
+  createdById === req.user.userId
