@@ -162,19 +162,26 @@ img {
   }
 }
 
+.split-view {
+  display: flex;
+  flex-direction: column;
+  margin: calc(var(--padding) * -1);
+  padding: var(--padding);
+}
+
 @media screen and (min-width: 640px) {
   .menu-btn {
     display: none;
   }
+}
 
+@media screen and (min-width: 900px) {
   .split-view {
     --padding: var(--main-content-padding);
 
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: var(--spacing-xl);
-    margin: calc(var(--padding) * -1);
-    padding: var(--padding);
   }
 }
 

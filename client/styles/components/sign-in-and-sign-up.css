@@ -1,6 +1,19 @@
 .sign-in-view,
 .sign-up-view {
-  min-height: 100vh;
+  height: 100%;
+}
+
+.sign-in-content,
+.sign-up-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+
+  h1,
+  p {
+    width: min(calc(var(--content-max-width) / 2), 100%);
+    margin: auto;
+  }
 }
 
 /* .split-view {
@@ -8,14 +21,7 @@
   gap: 0;
 } */
 
-.auth-image {
+/* .auth-image {
   width: 80%;
   justify-self: center;
-}
-
-@media screen and (max-width: 639px) {
-  .auth-image {
-    width: 40%;
-    margin-inline: auto;
-  }
-}
+} */
