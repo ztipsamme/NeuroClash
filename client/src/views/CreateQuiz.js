@@ -27,7 +27,7 @@ export default function CreateQuiz() {
   })
 
   return /*html*/ `
-    <main class="content-layout">
+    <main>
       <h1>Create Quiz</h1>
       <quiz-data-form></quiz-data-form>
     </main>

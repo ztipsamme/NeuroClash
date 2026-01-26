@@ -5,10 +5,13 @@ import { getCurrentUser, signOut } from '../services/userService.js'
 const template = document.createElement('template')
 
 template.innerHTML = /* html */ `
-  <aside>
-    <div class="logo">NeuroClash</div>
-    <nav id="main-nav"></nav>
-    <nav id="auth-nav"></nav>
+  <aside class="main-nav">
+    <button id="menu-btn" class="menu-btn">menu</button>
+
+    <div class="main-nav-content">
+      <nav id="view-nav"></nav>
+      <nav id="auth-nav"></nav>
+    </div>
   </aside>
 `
 export default class MainNav extends HTMLElement {
@@ -18,7 +21,7 @@ export default class MainNav extends HTMLElement {
       '/styles/components/main-nav.css',
     ])
 
-    this.mainNav = this.shadowRoot.querySelector('#main-nav')
+    this.mainNav = this.shadowRoot.querySelector('#view-nav')
     this.authNav = this.shadowRoot.querySelector('#auth-nav')
 
     this.currentPath = window.location.pathname
@@ -26,7 +29,7 @@ export default class MainNav extends HTMLElement {
 
     this.mainLinks = [
       { label: 'Home', icon: Icon('Home'), path: '/' },
-      { label: 'My Quizzes', icon: Icon('Home'), path: '/my-quizzes' },
+      { label: 'My Quizzes', icon: Icon('Archive'), path: '/my-quizzes' },
     ]
 
     this.authLinks = [
@@ -80,7 +83,8 @@ export default class MainNav extends HTMLElement {
         ({ label, icon, path, classes }) => /* html */ `
           <a href="${path}" data-link
              class="${isCurrentPath(path)} ${classes || 'secondary'}">
-            ${icon ? `${icon} ` : ''}${label}
+             ${icon ? `${icon} ` : ''}
+             <span>${label}</span>
           </a>
         `
       )

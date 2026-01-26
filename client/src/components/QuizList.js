@@ -1,4 +1,4 @@
-import { WebComponentConstructorBase } from '../core/utils.js'
+import { Icon, WebComponentConstructorBase } from '../core/utils.js'
 import { getQuizzes } from '../services/quizService.js'
 
 const template = document.createElement('template')
@@ -10,6 +10,7 @@ export default class QuizList extends HTMLElement {
   constructor() {
     super()
     WebComponentConstructorBase(this, template)
+    this.pencil = Icon('Pencil')
   }
 
   async connectedCallback() {
@@ -30,8 +31,9 @@ export default class QuizList extends HTMLElement {
         category="${q.category}"
         createdBy="${q.createdBy ? q.createdBy.username : ''}"
         url="${url ? `/my-quizzes/edit/${q._id}` : `/quiz/${q._id}`}"
-        link-text="${url ? 'Edit Quiz' : 'Play Quiz'}"
         >
+        <slot slot="link-icon">${url ? Icon('Pencil') : Icon('Play')}</slot>
+        <slot slot="link-text">${url ? `Edit Quiz` : `Play Quiz`}</slot>
       </quiz-card>
     `
       )

@@ -16,7 +16,7 @@ export const QuestionCard = (index) => /* html */ `
         <input name="incorrect" />
         <input name="incorrect" />
       </div>
-      <button type="button" data-delete class="delete-question-button">Delete question</button>
+      <button type="button" data-delete class="delete-question-button danger">Delete<span class="sr-only"> question</span></button>
     </fieldset>
   </li>
 `

@@ -30,6 +30,9 @@
   --font-medium: 500;
   --font-bold: 700;
   --font-bolder: 900;
+
+  /* Content-width */
+  --content-max-width: 900px;
 }
 
 :root {

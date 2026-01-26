@@ -1,20 +1,33 @@
-import { WebComponentConstructorBase } from '../core/utils.js'
+import { Icon, WebComponentConstructorBase } from '../core/utils.js'
 import './QuizCard.js'
 
 const template = document.createElement('template')
 template.innerHTML = /* html */ `  
-  <article class="quiz-card">
-    <h2 class="quiz-title"></h2>
-    <p class="quiz-category"></p>
+  <article class="quiz-card card">
+    <header>
+      <h2 class="quiz-title"></h2>
+      <p class="quiz-category"></p>
+    </header>
     <p class="quiz-description"></p>
-    <p class="quiz-created-by"></p>
-    <a href="" class="quiz-link sm">Play Quiz</a>
+
+    <footer>
+      <p class="quiz-created-by-container">
+        <span>Created by</span>
+        <span class="quiz-created-by"></span>
+      </p>
+      <a href="" class="quiz-link button">
+        <slot name="link-icon"></slot>
+        <slot name="link-text"></slot>
+      </a>
+    </footer>
   </article>
 `
 export default class QuizCard extends HTMLElement {
   constructor() {
     super()
-    WebComponentConstructorBase(this, template)
+    WebComponentConstructorBase(this, template, [
+      '/styles/components/quiz-card.css',
+    ])
   }
 
   static get observedAttributes() {
@@ -28,12 +41,19 @@ export default class QuizCard extends HTMLElement {
       { selector: '.quiz-description', attribute: 'description' },
       { selector: '.quiz-created-by', attribute: 'createdBy' },
       { selector: '.quiz-link', attribute: 'url', prop: 'href' },
-      { selector: '.quiz-link', attribute: 'link-text' },
     ]
 
     content.forEach(({ selector, attribute, prop }) => {
       const el = this.shadowRoot.querySelector(selector)
       const value = this.getAttribute(attribute)
+
+      if (selector === '.quiz-created-by' && !value) {
+        const createdBy = this.shadowRoot.querySelector(
+          '.quiz-created-by-container'
+        )
+
+        createdBy.remove()
+      }
 
       if (!el || !value) return
 

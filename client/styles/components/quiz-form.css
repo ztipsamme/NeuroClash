@@ -11,20 +11,11 @@ label,
 
 form {
   gap: var(--spacing-xl);
-  max-width: unset;
 }
 
 .question-cards,
 #create-quiz-form-question {
   gap: var(--spacing-md);
-}
-
-.card {
-  border-radius: var(--radius-md);
-  border: 2px solid var(--color-secondary);
-  padding: var(--p-md);
-  position: relative;
-  list-style: none;
 }
 
 fieldset {
@@ -50,21 +41,14 @@ label > :not(.description) {
 }
 
 .delete-question-button {
-  --color-base: var(--color-secondary);
-
   border-radius: 0 var(--radius-sm) 0 var(--radius-sm);
-  font-size: var(--text-xs);
   position: absolute;
   top: 0;
   right: 0;
 }
 
-.delete-question-button:not(:disabled):hover {
-  --color-base: var(--color-danger);
-}
-
 #add-btn {
-  align-self: flex-start;
+  margin-top: var(--spacing-md);
 }
 
 .delete-quiz-button {

@@ -10,7 +10,7 @@ export default function EditQuiz({ id }) {
   queueMicrotask(() => init(id))
 
   return /*html*/ `
-    <main class="content-layout">
+    <main>
       <h1>Loading Edit Quiz...</h1>
       <quiz-data-form></quiz-data-form>
     </main>

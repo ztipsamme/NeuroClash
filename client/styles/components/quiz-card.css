@@ -1,0 +1,47 @@
+@import '../global.css';
+
+.quiz-card,
+.quiz-created-by-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+
+  > footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    align-items: end;
+    &:has(.quiz-created-by-container) {
+      justify-content: space-between;
+    }
+  }
+}
+
+.quiz-title {
+  margin: 0;
+  line-height: var(--text-xl);
+  text-overflow: clip;
+}
+
+.quiz-description {
+  height: 3lh;
+  text-overflow: clip;
+}
+
+.quiz-category,
+.quiz-created-by-container > :first-child {
+  color: var(--color-text-medium);
+}
+
+.quiz-created-by-container {
+  line-height: var(--text-sm);
+  gap: 0;
+  height: min-content;
+}
+
+.quiz-link ::slotted(svg) {
+  --size: 24px;
+  height: var(--size);
+  width: var(--size);
+  margin-block: calc(((33px - 12px) / 2) * -1);
+}

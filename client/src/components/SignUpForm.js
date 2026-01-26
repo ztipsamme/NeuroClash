@@ -5,7 +5,7 @@ import { createUser } from '../services/userService.js'
 const template = document.createElement('template')
 
 template.innerHTML = /* html */ `
-  <form id="signUpForm" class="center">
+  <form id="signUpForm">
     ${[
       { name: 'username', type: 'text', label: 'Username' },
       { name: 'email', type: 'email', label: 'Email' },

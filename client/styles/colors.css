@@ -18,6 +18,9 @@
   --color-text-light: var(--color-graphite);
   --color-text-medium: hsl(from var(--color-graphite) h s calc(l + 30));
   --color-text-dark: var(--color-bright-snow);
+
+  --color-background: hsl(from var(--color-glaucous) h s calc(l + 30));
+  --color-background-secondary: var(--color-bright-snow);
 }
 
 * {

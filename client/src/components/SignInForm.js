@@ -5,7 +5,7 @@ import { signInUser } from '../services/userService.js'
 const template = document.createElement('template')
 
 template.innerHTML = /* html */ `
-  <form id="signInForm" class="center">
+  <form id="signInForm">
     <label for="username" class="sr-only">Username:</label>
     <input type="text" name="username" placeholder="Username"/>
     

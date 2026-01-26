@@ -1,5 +1,44 @@
 @import '../global.css';
 
+.menu-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 10;
+}
+
+.main-nav {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: var(--nav-width);
+}
+
+.main-nav,
+.main-nav a {
+  color: white;
+}
+
+.main-nav-content {
+  position: absolute;
+  width: var(--nav-width);
+  top: 0;
+  right: calc(var(--nav-width) * -1);
+  height: 100vh;
+  transition: right var(--animation-duration) linear;
+}
+
+/* .main-nav-header {
+  display: flex;
+  justify-content: space-between;
+  z-index: 1;
+}
+
+.main-nav {
+  background: var(--color-background-secondary);
+  height: 100%;
+}
+
 nav {
   display: flex;
   flex-direction: column;
@@ -11,8 +50,9 @@ a {
   padding: var(--p-sm);
   border-radius: var(--radius);
   text-decoration: none;
-
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
 }
+
+a.button,
+button {
+  align-self: stretch;
+} */
