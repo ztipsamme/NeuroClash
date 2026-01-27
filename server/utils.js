@@ -4,7 +4,7 @@ export const ValidatePassword = (password) =>
   )
 
 export const ValidateUsername = (username) =>
-  /^[a-zA-Z][a-zA-Z0-9_-]{3,20}$/.test(username)
+  /^[a-zA-Z][a-zA-Z0-9_-]{2,19}$/.test(username)
 
 export const ValidateEmail = (email) =>
   /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)
@@ -40,5 +40,4 @@ export const ValidateQuiz = ({ meta, questions }) => {
   return metaValid && questionsValid
 }
 
-export const ValidateCreator = (createdById, req) =>
-  createdById === req.user.userId
+export const ValidateUser = (userId, req) => userId === req.user.userId

@@ -1,45 +1,38 @@
 import { navigate } from '../router/index.js'
 import { getCurrentUser } from './userService.js'
 
+const url = 'http://localhost:8000/quizzes'
+
 const fetchData = async (path) => {
-  const res = await fetch(path)
+  const res = await fetch(url + path)
   const data = await res.json()
   return data
 }
 
-export const getQuizzes = async () => {
-  const url = window.location.href.includes('/my-quizzes')
-
-  if (!url) {
-    return await fetchData('http://localhost:8000/quizzes')
-  }
-
+export const getMyQuizzes = async () => {
   const user = await getCurrentUser()
-  const userId = user.data.userId
 
-  const res = await fetch(
-    `http://localhost:8000/quizzes/my-quizzes/${userId}`,
-    {
-      credentials: 'include',
-    }
-  )
+  const res = await fetch(`${url}/my-quizzes/${user.data.userId}`, {
+    credentials: 'include',
+  })
 
   const data = await res.json()
   return data
 }
 
-export const getQuizById = async (id) =>
-  await fetchData(`http://localhost:8000/quizzes/quiz-meta/${id}`)
+export const getCategorizedQuizzes = async (limit) =>
+  await fetchData(`/categorized` + (limit ? `?limit=${limit}` : ''))
+
+export const getQuizById = async (id) => await fetchData(`/quiz-meta/${id}`)
 
 export const getQuizWithQuestionsById = async (id) =>
-  await fetchData(`http://localhost:8000/quizzes/full-quiz/${id}`)
+  await fetchData(`/quiz/${id}`)
 
-export const getTopQuiz = async () =>
-  await fetchData(`http://localhost:8000/quizzes/top-quiz`)
+export const getTopQuiz = async () => await fetchData(`/top-quiz`)
 
 export const createQuiz = async (quiz) => {
   try {
-    const res = await fetch('http://localhost:8000/quizzes/quiz', {
+    const res = await fetch(url + '/quiz', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
@@ -64,7 +57,7 @@ export const updateQuiz = async (quiz) => {
   const id = quiz.meta._id
 
   try {
-    const res = await fetch(`http://localhost:8000/quizzes/quiz/${id}`, {
+    const res = await fetch(url + `/quiz/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
@@ -87,7 +80,7 @@ export const updateQuiz = async (quiz) => {
 
 export const deleteQuiz = async (id) => {
   try {
-    const res = await fetch(`http://localhost:8000/quizzes/quiz/${id}`, {
+    const res = await fetch(url + `/quiz/${id}`, {
       method: 'DELETE',
       credentials: 'include',
     })

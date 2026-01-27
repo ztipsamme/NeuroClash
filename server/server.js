@@ -5,7 +5,7 @@ import express from 'express'
 
 import { connectToDatabase } from './database.js'
 import authRoutes from './routes/auth.js'
-import quizRoutes from './routes/quizzes.js'
+import quizRoutes from './routes/quizzes/index.js'
 
 dotenv.config()
 

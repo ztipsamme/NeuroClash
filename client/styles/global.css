@@ -85,7 +85,8 @@ img {
       gap: var(--spacing-sm);
     }
 
-    a {
+    a,
+    button {
       padding: var(--_padding);
       border-radius: var(--radius);
       text-decoration: none;

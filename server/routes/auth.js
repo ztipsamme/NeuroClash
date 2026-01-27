@@ -1,114 +1,56 @@
-import express from 'express'
 import bcrypt from 'bcrypt'
+import express from 'express'
 import jwt from 'jsonwebtoken'
-import { getCollection } from '../database.js'
+import { resStatusJson } from '../helpers.js'
+import { requireAuth } from '../middleware/auth.js'
+import {
+  addUser,
+  deleteUser,
+  findUserByUserId,
+  findUserByUsername,
+  findUsers,
+  isCurrentUser,
+} from '../services/service.js'
 import {
   ValidateBirthday,
   ValidateEmail,
   ValidatePassword,
   ValidateUsername,
 } from '../utils.js'
-import { requireAuth } from '../middleware/auth.js'
 
 const router = express.Router()
 let SECRET = process.env.SECRET
 
 router.get('/', async (req, res) => {
   try {
-    const usersCollection = getCollection('users')
-    const users = await usersCollection.find({}).toArray()
-    res.status(200).json(users)
+    const users = await findUsers()
+    resStatusJson(res, { json: users }, 200)
   } catch (error) {
-    console.error(error)
-    res.status(500).json({ message: 'Server error' })
+    resStatusJson(res, { error }, 500)
   }
 })
 
-router.post('/sign-up', async (req, res) => {
-  const { username, email, birthday, password } = req.body
-
-  try {
-    const usersCollection = getCollection('users')
-
-    const existingUser = await usersCollection.findOne({ username })
-    if (existingUser) {
-      return res.status(400).json({
-        message: 'The username unavailable, please try a different one.',
-      })
-    }
-
-    if (!ValidateUsername(username)) {
-      res.status(400).json({
-        message:
-          'Username does not meet all of the following requirements:\n' +
-          '- Start with a letter\n' +
-          '- Can contain letters, numbers, dashes and underscores' +
-          '- Must be 3-20 characters long',
-      })
-      return
-    }
-
-    if (!ValidateEmail(email)) {
-      res.status(400).json({
-        message: 'Invalid email adress. Correct format ex: youremail@mail.com',
-      })
-      return
-    }
-
-    if (!ValidateBirthday(birthday)) {
-      res.status(400).json({
-        message: 'Invalid date or date format.',
-      })
-      return
-    }
-
-    if (!ValidatePassword(password)) {
-      res.status(400).json({
-        message:
-          'Password does not meet all of the following requirements.:\n' +
-          '- Must contain a number\n' +
-          '- Must contain a capital letter\n' +
-          '- Must contain one special character ex: @#$%^&\n' +
-          '- Must be 8-20 characters long',
-      })
-      return
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 10)
-    await usersCollection.insertOne({
-      username,
-      email,
-      birthday,
-      password: hashedPassword,
-    })
-
-    res.status(201).json({ message: 'User created' })
-  } catch (error) {
-    console.error(error)
-    res.status(500).json({ message: 'Server error' })
-  }
+router.get('/me', requireAuth, (req, res) => {
+  resStatusJson(res, { json: req.user }, 200)
 })
 
 router.post('/sign-in', async (req, res) => {
-  const { username, password } = req.body
+  const { username, password: password } = req.body
 
   try {
-    const usersCollection = getCollection('users')
-    const user = await usersCollection.findOne({ username })
+    const user = await findUserByUsername(username)
+    const validPassword = await bcrypt.compare(password, user?.password)
 
-    if (!user)
-      return res.status(400).json({ message: 'Incorrect username or password' })
+    if (!user || !validPassword)
+      return resStatusJson(
+        res,
+        { message: 'Incorrect username or password' },
+        403
+      )
 
-    const valid = await bcrypt.compare(password, user.password)
-    if (!valid) {
-      return res.status(400).json({ message: 'Incorrect username or password' })
-    }
-
-    const token = jwt.sign(
-      { userId: user._id, username: user.username },
-      SECRET,
-      { expiresIn: '1h' }
-    )
+    const token = jwt.sign({ userId: user._id, username: username }, SECRET, {
+      expiresIn: '1h',
+    })
 
     res.cookie('accessToken', token, {
       httpOnly: true,
@@ -118,28 +60,112 @@ router.post('/sign-in', async (req, res) => {
       maxAge: 15 * 60 * 1000,
     })
 
-    res.status(200).json({ message: 'Signed in' })
+    resStatusJson(res, { json: { message: 'Signed in' } }, 200)
   } catch (error) {
-    console.error(error)
-    return res.status(500).json({ message: 'Server error' })
+    resStatusJson(res, { error }, 500)
+  }
+})
+
+router.post('/sign-up', async (req, res) => {
+  const user = req.body
+  const { username, email, birthday, password } = user
+  const badReq = (message) => resStatusJson(res, { message: message }, 400)
+
+  try {
+    const existingUser = await findUserByUsername(username)
+
+    if (existingUser) {
+      return resStatusJson(
+        res,
+        {
+          json: {
+            message: 'The username unavailable, please try a different one.',
+          },
+        },
+        400
+      )
+    }
+
+    if (!ValidateUsername(username)) {
+      console.log(ValidateUsername(username))
+
+      return badReq('The username unavailable, please try a different one.')
+    }
+
+    if (!ValidateEmail(email)) {
+      return badReq(
+        'Invalid email adress. Correct format ex: youremail@mail.com'
+      )
+    }
+
+    if (!ValidateBirthday(birthday)) {
+      return badReq('Invalid date or date format.')
+    }
+
+    if (!ValidatePassword(password)) {
+      return badReq(
+        'Password does not meet all of the following requirements.:\n' +
+          '- Must contain a number\n' +
+          '- Must contain a capital letter\n' +
+          '- Must contain one special character ex: @#$%^&\n' +
+          '- Must be 8-20 characters long'
+      )
+    }
+
+    await addUser(user)
+
+    resStatusJson(res, { json: { message: 'User created' } }, 201)
+  } catch (error) {
+    resStatusJson(res, { error }, 500)
   }
 })
 
 router.post('/sign-out', (req, res) => {
-  res.clearCookie('accessToken', {
-    httpOnly: true,
-    secure: false,
-    sameSite: 'lax',
-    path: '/',
-  })
-
-  res.status(200).json({ message: 'Signed out' })
+  try {
+    res.clearCookie('accessToken', {
+      httpOnly: true,
+      secure: false,
+      sameSite: 'lax',
+      path: '/',
+    })
+    resStatusJson(res, { json: { message: 'Signed out' } }, 200)
+  } catch (error) {
+    resStatusJson(res, { error }, 500)
+  }
 })
 
-router.get('/me', requireAuth, (req, res) => {
-  res.status(200).json({
-    user: req.user,
-  })
+router.delete('/:id', requireAuth, async (req, res) => {
+  const { id } = req.params
+
+  try {
+    const user = await findUserByUserId(id)
+    const isUser = await isCurrentUser(user._id.toString(), req)
+
+    if (!user) {
+      return resStatusJson(
+        res,
+        {
+          message: 'User not found',
+        },
+        404
+      )
+    }
+
+    if (!isUser) {
+      return resStatusJson(
+        res,
+        {
+          message: 'Not allowed to delete this user',
+        },
+        403
+      )
+    }
+
+    await deleteUser(id)
+    resStatusJson(res, { json: { message: 'Deleted account' } }, 200)
+  } catch (error) {
+    resStatusJson(res, { error }, 500)
+  }
 })
 
 export default router

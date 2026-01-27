@@ -2,9 +2,9 @@ export const getCurrentUser = async () => {
   const res = await fetch('http://localhost:8000/auth/me', {
     credentials: 'include',
   })
-
   const data = await res.json()
-  return { ok: res.ok, data: data.user }
+
+  return { ok: res.ok, data }
 }
 
 export const createUser = async ({ username, email, birthday, password }) => {

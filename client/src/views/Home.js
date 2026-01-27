@@ -1,5 +1,10 @@
+import QuizList from '../components/QuizList.js'
 import { Icon } from '../core/utils.js'
-import { getTopQuiz } from '../services/quizService.js'
+import {
+  getCategorizedQuizzes,
+  getMyQuizzes,
+  getTopQuiz,
+} from '../services/quizService.js'
 import { getCurrentUser } from '../services/userService.js'
 import { addStylesheet } from '../utils.js'
 
@@ -19,7 +24,9 @@ export default function Home() {
       <section id="top-quiz" class="featured">
       </section>
     </div>
-    <quiz-list></quiz-list>    
+    <section class="quizzes-by-category">
+    <h2>Quizzes by category</h2>
+    </section>
   </div>`
 }
 
@@ -29,6 +36,20 @@ const init = async () => {
   greeting.innerHTML = /*html*/ `Welcome back, <strong>${currentUser.username}</strong>!`
 
   await setFeaturedQuiz()
+
+  const quizzesByCategory = document.querySelector('.quizzes-by-category')
+
+  const categorizedLists = await getCategorizedQuizzes(6)
+
+  categorizedLists.forEach(async (l) => {
+    const content = /*html*/ `
+      <section>
+        <h3>${l.categoryName}</h3>
+        ${await QuizList(l.list)}
+      </section>
+      `
+    quizzesByCategory.insertAdjacentHTML('beforeend', content)
+  })
 }
 
 const setFeaturedQuiz = async () => {
