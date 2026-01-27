@@ -5,14 +5,27 @@ import {
   getQuizWithQuestionsById,
   updateQuiz,
 } from '../services/quizService.js'
+import { addStylesheet } from '../utils.js'
 
 export default function EditQuiz({ id }) {
+  addStylesheet(
+    '.edit-quiz-view',
+    'edit-quiz-view',
+    '/components/quiz-form.css'
+  )
   queueMicrotask(() => init(id))
 
   return /*html*/ `
-    <div class="center-content">
-      <h1 id="header">Loading Edit Quiz...</h1>
-      <quiz-data-form></quiz-data-form>
+    <div class="split-view edit-quiz-view">
+      <header id="header" class="header">
+        <div>
+        <h1 class="view-header">Loading Edit Quiz...</h1>
+        <p class="description">Edit your quiz. Editing will not effect completed playthroughs of the quiz. Fill in all fields and add between 3 to 10 questions.</p>
+        </div>
+      </header>
+      <quiz-data-form>
+        <button slot="delete-quiz" class="button delete-quiz-button danger">Delete quiz</button>
+      </quiz-data-form>
     </div>
   `
 }
@@ -22,7 +35,8 @@ const init = async (id) => {
 
   if (!quiz) return
 
-  document.querySelector('#header').textContent = `Edit Quiz: ${id}`
+  const header = document.querySelector('#header')
+  header.querySelector('.view-header').textContent = `Edit Quiz: ${quiz.title}`
 
   const formEl = document.querySelector('quiz-data-form')
 
@@ -34,23 +48,18 @@ const init = async (id) => {
 
   formEl.setQuestions(quiz.questions)
 
-  const deleteButton = document.createElement('button')
-  deleteButton.type = 'button'
-  deleteButton.className = 'button delete-quiz-button danger'
-  deleteButton.textContent = 'Delete quiz'
+  document
+    .querySelector('.delete-quiz-button')
+    .addEventListener('click', async () => {
+      const res = await deleteQuiz(id)
 
-  deleteButton.addEventListener('click', async () => {
-    const res = await deleteQuiz(id)
-
-    if (!res.ok) {
-      formEl.error.hidden = false
-      formEl.error.textContent = res.data.message
-      return
-    }
-    navigate('/my-quizzes')
-  })
-
-  formEl.shadowRoot.append(deleteButton)
+      if (!res.ok) {
+        formEl.error.hidden = false
+        formEl.error.textContent = res.data.message
+        return
+      }
+      navigate('/my-quizzes')
+    })
 
   formEl.addEventListener('formSubmit', async (e) => {
     const data = e.detail

@@ -1,6 +1,6 @@
 export const QuestionCard = (index) => /* html */ `
   <li class="card">
-    <fieldset>
+    <fieldset class="question-card">
       <legend>Question ${index + 1}</legend>
       <div class="input-container">
         <label>Statement*</label>

@@ -16,7 +16,7 @@
 
 :root {
   --nav-width: 200px;
-  --animation-duration: 1s;
+  --animation-duration: 800ms;
   --main-layout-gap: var(--spacing-xl);
   --main-content-scale: 0.8;
   --main-content-padding: 30px;
@@ -108,6 +108,7 @@ img {
   height: 100vh;
   width: 100%;
   overflow-y: scroll;
+  scrollbar-width: none;
 
   &.split-view {
     display: flex;

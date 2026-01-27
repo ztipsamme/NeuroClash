@@ -37,7 +37,7 @@ const setFeaturedQuiz = async () => {
   const featuredQuiz = document.querySelector('.featured')
   featuredQuiz.innerHTML = /*html*/ `
         <header>
-          <h2>Most popular quiz.</h2>
+          <h2>Most popular quiz</h2>
           <p>Beat the high score</p>
         </header>
         <quiz-card

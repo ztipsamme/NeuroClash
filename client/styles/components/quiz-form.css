@@ -1,43 +1,23 @@
 @import '../global.css';
 
-form,
-label,
-.input-container,
-.question-cards,
-#create-quiz-form-question {
-  display: flex;
-  flex-direction: column;
+.edit-quiz-view {
+  height: calc(100vh - (var(--main-content-padding) * 4));
+  overflow-y: scroll;
+  scrollbar-width: none;
+
+  .view-header {
+    width: 100%;
+    word-break: break-all;
+    hyphens: auto;
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    -ms-hyphens: auto;
+  }
 }
 
-form {
-  gap: var(--spacing-xl);
-}
-
-.question-cards,
-#create-quiz-form-question {
-  gap: var(--spacing-md);
-}
-
-fieldset {
-  display: flex;
-  flex-direction: column;
-  border: transparent;
-  gap: var(--spacing-md);
-}
-
-legend {
-  font-size: var(--text-xl);
-  font-weight: var(--font-bold);
-  float: left;
-  width: 100%;
-}
-
-.input-container {
-  gap: var(--spacing-sm);
-}
-
-label > :not(.description) {
-  font-weight: var(--font-bold);
+.header > div {
+  position: sticky;
+  top: 0;
 }
 
 .delete-question-button {
@@ -51,7 +31,14 @@ label > :not(.description) {
   margin-top: var(--spacing-md);
 }
 
+.submit-and-delete {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+button[type='submit'],
 .delete-quiz-button {
-  margin-top: var(--spacing-xl);
-  float: right;
+  width: 14ch;
+  justify-content: center;
 }

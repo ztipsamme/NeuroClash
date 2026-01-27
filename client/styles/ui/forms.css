@@ -11,6 +11,29 @@ form {
   margin: auto;
 }
 
+legend {
+  font-size: var(--text-xl);
+  font-weight: var(--font-bold);
+  float: left;
+  width: 100%;
+}
+
+fieldset {
+  display: flex;
+  flex-direction: column;
+  border: transparent;
+  gap: var(--spacing-md);
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+}
+
+label > :not(.description) {
+  font-weight: var(--font-bold);
+}
+
 input {
   padding: calc(var(--sm) - 1px) calc(var(--md) - 1px);
   border: 1px solid hsl(0, 0%, 80%);
@@ -39,4 +62,29 @@ input:focus {
 button[type='submit'] {
   width: min(calc(var(--content-max-width) / 2), 100%);
   align-self: unset;
+}
+
+.input-container:has(> input + input) {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+form:has(section) {
+  gap: var(--spacing-xl);
+
+  fieldset,
+  section {
+    width: 100%;
+  }
+
+  section {
+    > fieldset,
+    ul {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-md);
+      width: 100%;
+    }
+  }
 }

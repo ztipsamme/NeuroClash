@@ -61,14 +61,6 @@ export default class QuizCard extends HTMLElement {
       }
     })
   }
-
-  connectedCallback() {
-    const card = this.shadowRoot.querySelector('.quiz-card')
-
-    card.addEventListener('mouseover', (e) => {
-      card.show()
-    })
-  }
 }
 
 window.customElements.define('quiz-card', QuizCard)

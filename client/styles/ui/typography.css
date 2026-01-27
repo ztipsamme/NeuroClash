@@ -18,6 +18,10 @@ strong,
   font-weight: var(--font-bolder);
 }
 
+.logo a {
+  font-size: inherit;
+}
+
 h1:has(strong),
 h2:has(strong) {
   background: none;

@@ -6,8 +6,8 @@ export default function MainLayout(content) {
   queueMicrotask(() => init())
 
   return /* html */ `
-    <div class="main-layout">  
-        <h1 class="logo">NeuroClash</h1>  
+    <div class="main-layout">
+        <h1 class="logo"><a href="/">NeuroClash</a></h1>  
         <aside class="main-nav">
         <button id="menu-btn" class="menu-btn">menu</button>
 

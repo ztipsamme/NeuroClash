@@ -18,7 +18,10 @@ template.innerHTML = /*html*/ `
   </section>
 
   <p class="errorMessage" hidden></p>
-  <button type="submit"><slot name="submit-label">Submit</slot></button>
+  <div class="submit-and-delete">
+    <button type="submit"><slot name="submit-label">Submit</slot></button>
+    <slot name="delete-quiz"></slot>
+  </div>
 </form>
 `
 
@@ -40,7 +43,9 @@ export default class QuizDataForm extends HTMLElement {
     this.addBtn = this.shadowRoot.querySelector('#add-btn')
     this.error = this.shadowRoot.querySelector('.errorMessage')
 
-    // for (let i = 0; i < MIN_QUESTIONS; i++) this.addQuestion()
+    if (window.location.pathname.includes('/create-quiz')) {
+      for (let i = 0; i < MIN_QUESTIONS; i++) this.addQuestion()
+    }
 
     this.addBtn.addEventListener('click', () => this.addQuestion())
     this.cards.addEventListener('click', (e) => this.onDelete(e))
