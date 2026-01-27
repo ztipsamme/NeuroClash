@@ -2,8 +2,14 @@ import { navigate } from '../router/index.js'
 import { createQuiz } from '../services/quizService.js'
 import { getCurrentUser } from '../services/userService.js'
 import '../components/QuizDataForm.js'
+import { addStylesheet } from '../utils.js'
 
 export default function CreateQuiz() {
+  addStylesheet(
+    '.create-quiz-view',
+    'create-quiz-view',
+    '/components/quiz-form.css'
+  )
   queueMicrotask(() => init())
 
   return /*html*/ `

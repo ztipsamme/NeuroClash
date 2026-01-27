@@ -1,6 +1,7 @@
 @import '../global.css';
 
-.edit-quiz-view {
+.edit-quiz-view,
+.create-quiz-view {
   height: calc(100vh - (var(--main-content-padding) * 4));
   overflow-y: scroll;
   scrollbar-width: none;
