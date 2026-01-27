@@ -1,4 +1,4 @@
-import { Icon, WebComponentConstructorBase } from '../core/utils.js'
+import { WebComponentConstructorBase } from '../core/utils.js'
 import './QuizCard.js'
 
 const template = document.createElement('template')
