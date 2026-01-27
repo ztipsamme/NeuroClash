@@ -100,6 +100,26 @@ router.get('/full-quiz/:id', async (req, res) => {
   }
 })
 
+router.get('/top-quiz', async (req, res) => {
+  try {
+    const quiz = await getCollection('quizzes').findOne()
+    if (!quiz) res.status(400).json({ message: 'Quiz not found' })
+
+    const creator = await getCreator(quiz.createdBy)
+    if (!creator) res.status(400).json({ message: 'Quiz creator not found' })
+
+    const populatedQuiz = {
+      ...quiz,
+      createdBy: creator,
+    }
+
+    res.status(200).json(populatedQuiz)
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ message: 'Server error' })
+  }
+})
+
 // PROTECTED
 router.get('/my-quizzes/:userId', requireAuth, async (req, res) => {
   const { userId } = req.params

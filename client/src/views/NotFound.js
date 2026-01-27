@@ -1,7 +1,7 @@
 export default function NotFound() {
   return /* html */ `
-  <main>
+  <div>
     <h1>Not Found</h1>
-  </main>
+  </div>
   `
 }

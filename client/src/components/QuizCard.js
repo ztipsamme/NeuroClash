@@ -3,9 +3,9 @@ import './QuizCard.js'
 
 const template = document.createElement('template')
 template.innerHTML = /* html */ `  
-  <article class="quiz-card card">
+  <a href="" class="quiz-card card quiz-link">
     <header>
-      <h2 class="quiz-title"></h2>
+      <h3 class="quiz-title"></h3>
       <p class="quiz-category"></p>
     </header>
     <p class="quiz-description"></p>
@@ -15,12 +15,9 @@ template.innerHTML = /* html */ `
         <span>Created by</span>
         <span class="quiz-created-by"></span>
       </p>
-      <a href="" class="quiz-link button">
-        <slot name="link-icon"></slot>
-        <slot name="link-text"></slot>
-      </a>
-    </footer>
-  </article>
+      </footer>
+    <div class="quiz-dialog"></div>
+  </a>
 `
 export default class QuizCard extends HTMLElement {
   constructor() {
@@ -41,12 +38,12 @@ export default class QuizCard extends HTMLElement {
       { selector: '.quiz-description', attribute: 'description' },
       { selector: '.quiz-created-by', attribute: 'createdBy' },
       { selector: '.quiz-link', attribute: 'url', prop: 'href' },
+      { selector: '.quiz-dialog', attribute: 'dialog' },
     ]
 
     content.forEach(({ selector, attribute, prop }) => {
       const el = this.shadowRoot.querySelector(selector)
       const value = this.getAttribute(attribute)
-
       if (selector === '.quiz-created-by' && !value) {
         const createdBy = this.shadowRoot.querySelector(
           '.quiz-created-by-container'
@@ -62,6 +59,14 @@ export default class QuizCard extends HTMLElement {
       } else {
         el.textContent = value
       }
+    })
+  }
+
+  connectedCallback() {
+    const card = this.shadowRoot.querySelector('.quiz-card')
+
+    card.addEventListener('mouseover', (e) => {
+      card.show()
     })
   }
 }

@@ -7,7 +7,7 @@ export default function MainLayout(content) {
 
   return /* html */ `
     <div class="main-layout">  
-        <h1 class="logo">NuroClash</h1>  
+        <h1 class="logo">NeuroClash</h1>  
         <aside class="main-nav">
         <button id="menu-btn" class="menu-btn">menu</button>
 
@@ -17,7 +17,7 @@ export default function MainLayout(content) {
         </div>
         </aside>
 
-        <div id="view" class="main-content">${content}</div>
+        <main id="view" class="main-content">${content}</main>
     </div>`
 }
 
@@ -25,17 +25,22 @@ const init = async () => {
   const layout = document.querySelector('.main-layout')
   const nav = document.querySelector('.main-nav')
   const menuBtn = nav.querySelector('#menu-btn')
+  const layoutClasses = layout.classList
+  const openNav = 'nav-open'
 
   renderViewLinks()
   renderAuthLinks()
 
   menuBtn.addEventListener('click', (e) => {
-    const layoutClasses = layout.classList
-    const openNav = 'nav-open'
-
     if (layoutClasses.contains(openNav)) {
       layoutClasses.remove(openNav)
     } else [layoutClasses.add(openNav)]
+  })
+
+  window.addEventListener('resize', (e) => {
+    if (window.innerWidth > 639 && layoutClasses.contains(openNav)) {
+      layoutClasses.remove(openNav)
+    }
   })
 }
 

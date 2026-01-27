@@ -1,6 +1,6 @@
-.sign-in-view,
-.sign-up-view {
-  height: 100%;
+.auth-image {
+  max-width: min(calc(var(--content-max-width) / 2), 100%);
+  margin: auto;
 }
 
 .sign-in-content,
@@ -16,12 +16,9 @@
   }
 }
 
-/* .split-view {
-  grid-template-rows: min-content;
-  gap: 0;
-} */
-
-/* .auth-image {
-  width: 80%;
-  justify-self: center;
-} */
+@media screen and (min-width: 900px) {
+  .sign-in-view,
+  .sign-up-view {
+    height: 100%;
+  }
+}

@@ -4,7 +4,7 @@ export default function QuizResult({ id }) {
   queueMicrotask(() => init(id))
 
   return /* html */ `
-    <main id="quiz-result">
+    <div id="quiz-result">
       <h1 id="quiz-title">Loading quiz...</h1>
 
       <table>
@@ -20,7 +20,7 @@ export default function QuizResult({ id }) {
         </tr>
       </table>
       <a href="/">Back to Home</a>
-    </main>
+    </div>
   `
 }
 

@@ -34,6 +34,9 @@ export const getQuizById = async (id) =>
 export const getQuizWithQuestionsById = async (id) =>
   await fetchData(`http://localhost:8000/quizzes/full-quiz/${id}`)
 
+export const getTopQuiz = async () =>
+  await fetchData(`http://localhost:8000/quizzes/top-quiz`)
+
 export const createQuiz = async (quiz) => {
   try {
     const res = await fetch('http://localhost:8000/quizzes/quiz', {

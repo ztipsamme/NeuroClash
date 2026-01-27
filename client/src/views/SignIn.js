@@ -1,11 +1,11 @@
+import { addStylesheet } from '../utils.js'
+
 export default function SignIn() {
-  if (!document.querySelector('.sign-in-view')) {
-    const link = document.createElement('link')
-    link.id = 'sign-in-view'
-    link.rel = 'stylesheet'
-    link.href = '/styles/components/sign-in-and-sign-up.css'
-    document.head.appendChild(link)
-  }
+  addStylesheet(
+    '.sign-in-view',
+    'sign-in-view',
+    '/components/sign-in-and-sign-up.css'
+  )
 
   queueMicrotask(() => {
     const img = document.querySelector('.auth-image')
@@ -22,7 +22,7 @@ export default function SignIn() {
   })
 
   return /* html */ `
-  <main id="sign-in-view" class="sign-in-view split-view center-content">
+  <div id="sign-in-view" class="sign-in-view split-view center-content">
     <img alt="Man illustration" class="auth-image"/>
 
     <div class="sign-in-content">
@@ -30,5 +30,5 @@ export default function SignIn() {
       <sign-in-form></sign-in-form>
       <p>No account? No worries, <a href="/sign-up" class=" secondary">sign up here!</a></p>
     </div>
-  </main>`
+  </div>`
 }

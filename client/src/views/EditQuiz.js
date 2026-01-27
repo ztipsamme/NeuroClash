@@ -10,10 +10,10 @@ export default function EditQuiz({ id }) {
   queueMicrotask(() => init(id))
 
   return /*html*/ `
-    <main>
-      <h1>Loading Edit Quiz...</h1>
+    <div class="center-content">
+      <h1 id="header">Loading Edit Quiz...</h1>
       <quiz-data-form></quiz-data-form>
-    </main>
+    </div>
   `
 }
 
@@ -22,7 +22,7 @@ const init = async (id) => {
 
   if (!quiz) return
 
-  document.querySelector('h1').textContent = `Edit Quiz: ${id}`
+  document.querySelector('#header').textContent = `Edit Quiz: ${id}`
 
   const formEl = document.querySelector('quiz-data-form')
 

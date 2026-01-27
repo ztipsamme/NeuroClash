@@ -30,8 +30,8 @@ export default function Quiz({ id }) {
   queueMicrotask(() => init(id))
 
   return /* html */ `
-    <main id="quiz-view">
-    </main>
+    <div id="quiz-view">
+    </div>
   `
 }
 

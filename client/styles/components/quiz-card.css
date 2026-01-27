@@ -1,5 +1,15 @@
 @import '../global.css';
 
+a.quiz-card {
+  color: unset;
+  font-weight: unset;
+  text-decoration: none;
+  display: block;
+  overflow: hidden;
+  border: 2px solid transparent;
+  position: relative;
+}
+
 .quiz-card,
 .quiz-created-by-container {
   display: flex;
@@ -17,8 +27,45 @@
   }
 }
 
+.quiz-dialog {
+  --color-base: var(--color-bright-snow);
+  --bg-opacity: 0.8;
+
+  background: linear-gradient(
+    to bottom,
+    hsl(from var(--color-base) h s l / var(--bg-opacity)),
+    hsl(from var(--color-light) h s l / var(--bg-opacity))
+  );
+  color: var(--color-secondary);
+  font-size: var(--4xl);
+  font-weight: var(--font-bold);
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1s linear;
+  visibility: hidden;
+}
+
+.quiz-card:hover {
+  box-shadow: 0 4px 8px var(--color-secondary);
+  border: 2px solid var(--color-secondary);
+
+  .quiz-dialog {
+    opacity: 1;
+    transition-delay: 0s;
+    visibility: visible;
+  }
+}
+
 .quiz-title {
-  margin: 0;
+  font-size: 2rem;
+  font-weight: var(--font-bold);
   line-height: var(--text-xl);
   text-overflow: clip;
 }

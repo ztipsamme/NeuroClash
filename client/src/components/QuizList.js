@@ -31,9 +31,8 @@ export default class QuizList extends HTMLElement {
         category="${q.category}"
         createdBy="${q.createdBy ? q.createdBy.username : ''}"
         url="${url ? `/my-quizzes/edit/${q._id}` : `/quiz/${q._id}`}"
+        dialog="${url ? 'Edit quiz' : 'Play quiz'}"
         >
-        <slot slot="link-icon">${url ? Icon('Pencil') : Icon('Play')}</slot>
-        <slot slot="link-text">${url ? `Edit Quiz` : `Play Quiz`}</slot>
       </quiz-card>
     `
       )
