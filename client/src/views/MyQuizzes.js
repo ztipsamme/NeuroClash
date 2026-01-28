@@ -8,11 +8,15 @@ export default function MyQuizzes() {
   <div class="my-quizzes">
     <h1>My Quizzes</h1>
     <a href="/my-quizzes/create-quiz" class="button secondary">New Quiz</a>
+      <div class="quiz-lists-container">
+      </div>
   </div>`
 }
 
 const init = async () => {
   const quizzes = await QuizList(await getMyQuizzes())
 
-  document.querySelector('.my-quizzes').insertAdjacentHTML('beforeend', quizzes)
+  document
+    .querySelector('.quiz-lists-container')
+    .insertAdjacentHTML('beforeend', quizzes)
 }

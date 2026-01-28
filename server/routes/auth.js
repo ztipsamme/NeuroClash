@@ -87,8 +87,6 @@ router.post('/sign-up', async (req, res) => {
     }
 
     if (!ValidateUsername(username)) {
-      console.log(ValidateUsername(username))
-
       return badReq('The username unavailable, please try a different one.')
     }
 

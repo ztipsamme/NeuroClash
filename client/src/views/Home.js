@@ -25,7 +25,9 @@ export default function Home() {
       </section>
     </div>
     <section class="quizzes-by-category">
-    <h2>Quizzes by category</h2>
+      <h2 class="sr-only">Quizzes by category</h2>
+      <div class="quiz-lists-container">
+      </div>
     </section>
   </div>`
 }
@@ -37,14 +39,14 @@ const init = async () => {
 
   await setFeaturedQuiz()
 
-  const quizzesByCategory = document.querySelector('.quizzes-by-category')
+  const quizzesByCategory = document.querySelector('.quiz-lists-container')
 
   const categorizedLists = await getCategorizedQuizzes(6)
 
   categorizedLists.forEach(async (l) => {
     const content = /*html*/ `
-      <section>
-        <h3>${l.categoryName}</h3>
+      <section class="quiz-list-container">
+        <h3 class="quiz-list-title">${l.categoryName}</h3>
         ${await QuizList(l.list)}
       </section>
       `

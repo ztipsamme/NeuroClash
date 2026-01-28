@@ -63,7 +63,6 @@ const init = async (id) => {
 
   formEl.addEventListener('formSubmit', async (e) => {
     const data = e.detail
-    console.log('submit')
     data.meta._id = id
 
     const res = await updateQuiz(data)
