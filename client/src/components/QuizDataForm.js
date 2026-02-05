@@ -1,109 +1,93 @@
-import { WebComponentConstructorBase } from '../core/utils.js'
+import { getCurrentUser } from '../services/userService.js'
+import { deleteQuiz } from '../services/quizService.js'
 import { FormGroup } from './FormGroup.js'
 import { QuestionCard } from './QuestionCard.js'
+import { navigate } from '../router/index.js'
 
-const template = document.createElement('template')
-template.innerHTML = /*html*/ `
-<form class="quiz-data-form center">
-  <fieldset class="card">
-    <legend>Title and description</legend>
-    ${FormGroup({ label: 'Title', name: 'title', description: 'Give your quiz a title.' })}
-    ${FormGroup({ label: 'Description', name: 'description', description: 'Describe what your quiz is about.' })}
-    ${FormGroup({ label: 'Category', name: 'category', description: 'What category does your quiz belong to?' })}
-  </fieldset>
+export function QuizDataForm() {
+  const isEdit = window.location.pathname.includes('/edit-quiz')
 
-  <section>
-    <ul class="question-cards"></ul>
-    <button type="button" id="add-btn" class="secondary">Add question</button>
-  </section>
+  return /*html*/ `
+    <form class="quiz-data-form center">
+      <fieldset class="card">
+        <legend>Title and description</legend>
+        ${FormGroup({ label: 'Title', name: 'title', description: 'Give your quiz a title.' })}
+        ${FormGroup({ label: 'Description', name: 'description', description: 'Describe what your quiz is about.' })}
+        ${FormGroup({ label: 'Category', name: 'category', description: 'What category does your quiz belong to?' })}
+      </fieldset>
 
-  <p class="errorMessage" hidden></p>
-  <div class="submit-and-delete">
-    <button type="submit"><slot name="submit-label">Submit</slot></button>
-    <slot name="delete-quiz"></slot>
-  </div>
-</form>
-`
+      <section>
+        <ul class="question-cards"></ul>
+        <button type="button" class="secondary" id="add-btn">Add question</button>    
+      </section>
 
-const MIN_QUESTIONS = 3
-const MAX_QUESTIONS = 10
+      <p class="error-message" hidden></p>
 
-export default class QuizDataForm extends HTMLElement {
-  constructor() {
-    super()
-    WebComponentConstructorBase(this, template, [
-      '/styles/components/quiz-form.css',
-    ])
-    this.deletedQuestionIds = []
-  }
+      <div class="submit-and-delete">
+        <button type="submit">Submit</button>
+        ${
+          isEdit
+            ? ''
+            : /*html*/ `
+              <button slot="delete-quiz" class="button delete-quiz-button danger">
+                Delete quiz
+              </button>`
+        }
+      </div>
+    </form>
+  `
+}
 
-  connectedCallback() {
-    this.form = this.shadowRoot.querySelector('form')
-    this.cards = this.shadowRoot.querySelector('.question-cards')
-    this.addBtn = this.shadowRoot.querySelector('#add-btn')
-    this.error = this.shadowRoot.querySelector('.errorMessage')
+export const handleQuizDataForm = (container, onSubmit, quiz = null) => {
+  const isEdit = Boolean(quiz)
+  const form = container.querySelector('.quiz-data-form')
+  const questionCards = form.querySelector('.question-cards')
+  const addBtn = form.querySelector('#add-btn')
+  const questionList = form.querySelector('.question-cards')
+  const error = form.querySelector('.error-message')
+  const deleteQuizBtn = form.querySelector('.delete-quiz-button')
 
-    if (window.location.pathname.includes('/create-quiz')) {
-      for (let i = 0; i < MIN_QUESTIONS; i++) this.addQuestion()
-    }
+  let deletedQuestionIds = []
+  let questions = []
 
-    this.addBtn.addEventListener('click', () => this.addQuestion())
-    this.cards.addEventListener('click', (e) => this.onDelete(e))
-    this.form.addEventListener('submit', (e) => {
-      e.preventDefault()
-      const data = this.collectData()
-      this.dispatchEvent(
-        new CustomEvent('formSubmit', {
-          detail: data,
-          bubbles: true,
-          composed: true,
-        })
-      )
+  const updateUI = () => {
+    const cards = [...questionCards.children]
+    cards.forEach((card, i) => {
+      card.querySelector('legend').textContent = `Question ${i + 1}`
+      card.querySelector('[data-delete]').disabled = cards.length <= 3
     })
-
-    this.updateUI()
+    addBtn.disabled = cards.length >= 10
   }
 
-  collectData() {
-    const formData = new FormData(this.form)
-    const meta = {
-      title: formData.get('title'),
-      description: formData.get('description'),
-      category: formData.get('category'),
-    }
-
-    const questions = [...this.cards.children].map((card) => {
-      const incorrect = card.querySelectorAll('[name="incorrect"]')
-
-      return {
-        _id: card.dataset.id || undefined,
-        statement: card.querySelector('[name="statement"]').value,
-        category: meta.category,
-        answers: [
-          {
-            text: card.querySelector('[name="correct"]').value,
-            isCorrect: true,
-          },
-          ...[...incorrect].map((i) => ({ text: i.value, isCorrect: false })),
-        ],
-      }
-    })
-
-    return {
-      meta,
-      questions,
-      deletedQuestionIds: this.deletedQuestionIds,
-    }
+  const addQuestion = () => {
+    questionList.insertAdjacentHTML('beforeend', QuestionCard(questions.length))
+    questions.push({})
+    updateUI()
   }
 
-  setQuestions(questions) {
-    // rensa default-cards
-    this.cards.innerHTML = ''
-    this.deletedQuestionIds = []
+  const onDelete = (e) => {
+    const btn = e.target.closest('[data-delete]')
+    if (!btn) return
+    const card = btn.closest('.card')
+    if (card.dataset.id) deletedQuestionIds.push(card.dataset.id)
+    card.remove()
+    questions.pop()
+  }
+
+  const setMeta = () => {
+    form.querySelector('[name="title"]').value = quiz.title
+    form.querySelector('[name="description"]').value = quiz.description
+    form.querySelector('[name="category"]').value = quiz.category
+    form.querySelector('[type="submit"]').textContent = 'Update quiz'
+  }
+
+  const setQuestions = () => {
+    questionCards.innerHTML = ''
+    deletedQuestionIds = []
 
     questions.forEach((q) => {
-      this.addQuestion()
-      const card = this.cards.lastElementChild
+      addQuestion()
+      const card = questionCards.lastElementChild
 
       card.dataset.id = q._id
 
@@ -117,39 +101,87 @@ export default class QuizDataForm extends HTMLElement {
         .filter((a) => !a.isCorrect)
         .forEach((a, i) => (incorrect[i].value = a.text))
     })
-
-    this.updateUI()
   }
 
-  addQuestion() {
-    if (this.cards.children.length >= MAX_QUESTIONS) return
-    this.cards.insertAdjacentHTML(
-      'beforeend',
-      QuestionCard(this.cards.children.length)
-    )
-    this.updateUI()
+  const setErrorMessage = (errorMessage) => {
+    if (errorMessage) {
+      error.hidden = false
+      error.textContent = errorMessage
+    }
   }
 
-  onDelete(e) {
-    const btn = e.target.closest('[data-delete]')
-    if (!btn) return
-    const card = btn.closest('.card')
-
-    if (card.dataset.id) this.deletedQuestionIds.push(card.dataset.id)
-
-    card.remove()
-    this.updateUI()
+  if (isEdit) {
+    questions = quiz.questions
+    setMeta()
+    setQuestions()
+    updateUI()
   }
 
-  updateUI() {
-    const cards = [...this.cards.children]
-    cards.forEach((card, i) => {
-      card.querySelector('legend').textContent = `Question ${i + 1}`
-      card.querySelector('[data-delete]').disabled =
-        cards.length <= MIN_QUESTIONS
+  addBtn.addEventListener('click', addQuestion)
+
+  questionList.addEventListener('click', (e) => {
+    onDelete(e)
+    updateUI()
+  })
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault()
+
+    const user = await getCurrentUser()
+    if (!user.data) return
+
+    const formData = new FormData(form)
+    const meta = {
+      title: formData.get('title'),
+      description: formData.get('description'),
+      category: formData.get('category'),
+      createdBy: user.data.userId,
+    }
+    if (isEdit) meta._id = quiz?._id
+
+    const collectedQuestions = [...questionList.children].map((card) => {
+      const incorrect = card.querySelectorAll('[name="incorrect"]')
+
+      const question = {
+        statement: card.querySelector('[name="statement"]').value,
+        category: meta.category,
+        createdBy: user.data.userId,
+        answers: [
+          {
+            text: card.querySelector('[name="correct"]').value,
+            isCorrect: true,
+          },
+          ...[...incorrect].map((i) => ({ text: i.value, isCorrect: false })),
+        ],
+      }
+
+      if (isEdit) question._id = card.dataset.id
+
+      return question
     })
-    this.addBtn.disabled = cards.length >= MAX_QUESTIONS
-  }
+
+    if (onSubmit) {
+      const data = await onSubmit({
+        meta,
+        questions: collectedQuestions,
+        deletedQuestionIds,
+      })
+
+      setErrorMessage(data?.errorMessage)
+    }
+  })
+
+  deleteQuizBtn.addEventListener('click', async () => {
+    const res = await deleteQuiz(quiz._id)
+
+    if (!res.ok) {
+      setErrorMessage(data?.errorMessage)
+      return
+    }
+    navigate('/my-quizzes')
+  })
+
+  return { addQuestion }
 }
 
-window.customElements.define('quiz-data-form', QuizDataForm)
+// document

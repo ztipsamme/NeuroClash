@@ -3,13 +3,10 @@ import { createQuiz } from '../services/quizService.js'
 import { getCurrentUser } from '../services/userService.js'
 import '../components/QuizDataForm.js'
 import { addStylesheet } from '../utils.js'
+import { handleQuizDataForm, QuizDataForm } from '../components/QuizDataForm.js'
 
 export default function CreateQuiz() {
-  addStylesheet(
-    '.create-quiz-view',
-    'create-quiz-view',
-    '/components/quiz-form.css'
-  )
+  addStylesheet('quiz-form-css', '/components/quiz-form.css')
   queueMicrotask(() => init())
 
   return /*html*/ `
@@ -20,32 +17,27 @@ export default function CreateQuiz() {
         <p class="description">Create your quiz. Fill in all fields and add between 3 to 10 questions.</p>
         </div>
       </header>
-      <quiz-data-form></quiz-data-form>
+      ${QuizDataForm()}
     </div>
   `
 }
 
 const init = async () => {
-  const header = document.querySelector('#header')
-  header.querySelector('.view-header').textContent = `Create Quiz`
+  document.querySelector('.view-header').textContent = `Create Quiz`
 
-  const formEl = document.querySelector('quiz-data-form')
-
-  formEl.addEventListener('formSubmit', async (e) => {
-    const data = e.detail
-    const user = await getCurrentUser()
-    if (!user.data) return
-
-    data.meta.createdBy = user.data.userId
-    data.questions.forEach((q) => (q.createdBy = user.data.userId))
-
-    const res = await createQuiz(data)
+  const onSubmit = async ({ meta, questions, deletedQuestionIds }) => {
+    const res = await createQuiz({ meta, questions })
     if (!res.ok) {
-      formEl.error.hidden = false
-      formEl.error.textContent = res.data.message
-      return
+      return { errorMessage: res.data?.message }
     }
 
     navigate('/')
-  })
+  }
+
+  const { addQuestion } = handleQuizDataForm(
+    document.querySelector('.create-quiz-view'),
+    onSubmit
+  )
+
+  for (let i = 0; i < 3; i++) addQuestion()
 }

@@ -1,6 +1,3 @@
-@import './colors.css';
-@import './sizes.css';
-
 h1 {
   --color-base: var(--color-secondary);
   font-size: 2.5rem;

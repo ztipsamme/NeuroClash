@@ -65,9 +65,8 @@ export const addQuiz = async (meta, questions, session) => {
     {
       ...meta,
       questionIds: Object.values(
-        await QUESTIONS_COLLECTION.insertMany(questions, {
-          session,
-        })
+        (await QUESTIONS_COLLECTION.insertMany(questions, { session }))
+          .insertedIds
       ),
     },
     { session }

@@ -1,3 +1,4 @@
+import { QuizCard } from '../components/QuizCard.js'
 import QuizList from '../components/QuizList.js'
 import { Icon } from '../core/utils.js'
 import {
@@ -9,7 +10,8 @@ import { getCurrentUser } from '../services/userService.js'
 import { addStylesheet } from '../utils.js'
 
 export default function Home() {
-  addStylesheet('.home-view', 'home-view', '/components/home.css')
+  addStylesheet('home-css', '/components/home.css')
+
   queueMicrotask(() => init())
 
   return /* html */ `
@@ -63,16 +65,13 @@ const setFeaturedQuiz = async () => {
           <h2>Most popular quiz</h2>
           <p>Beat the high score</p>
         </header>
-        <quiz-card
-          title="${title}"
-          description="${description}"
-          category="${category}"
-          createdBy="${createdBy ? createdBy.username : ''}"
-          url="/quiz/${_id}"
-          dialog="Play quiz"
-          >
-          <slot slot="link-icon">${Icon('Play')}</slot>
-          <slot slot="link-text">Play Quiz</slot>
-        </quiz-card>
+        ${QuizCard({
+          title,
+          description,
+          category,
+          createdBy: createdBy ? createdBy.username : '',
+          url: `/quiz/${_id}`,
+          actionText: 'Play quiz',
+        })}
         `
 }

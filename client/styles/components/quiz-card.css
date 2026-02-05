@@ -1,5 +1,3 @@
-@import '../global.css';
-
 a.quiz-card {
   color: unset;
   font-weight: unset;
@@ -27,7 +25,7 @@ a.quiz-card {
   }
 }
 
-.quiz-dialog {
+.quiz-actionText {
   --color-base: var(--color-bright-snow);
   --bg-opacity: 0.8;
 
@@ -56,7 +54,7 @@ a.quiz-card {
   box-shadow: 0 4px 8px var(--color-secondary);
   border: 2px solid var(--color-secondary);
 
-  .quiz-dialog {
+  .quiz-actionText {
     opacity: 1;
     transition-delay: 0s;
     visibility: visible;
@@ -76,6 +74,7 @@ a.quiz-card {
 }
 
 .quiz-category,
+.quiz-created-by,
 .quiz-created-by-container > :first-child {
   color: var(--color-text-medium);
 }

@@ -1,7 +1,5 @@
 export const applyStyles = (shadowRoot, stylesheets = []) => {
-  const styles = ['/styles/global.css'].concat(stylesheets)
-
-  styles.forEach((s) => {
+  stylesheets.forEach((s) => {
     const link = document.createElement('link')
     link.rel = 'stylesheet'
     link.href = s

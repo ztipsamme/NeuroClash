@@ -1,18 +1,15 @@
 import '../components/QuizDataForm.js'
+import { handleQuizDataForm, QuizDataForm } from '../components/QuizDataForm.js'
 import { navigate } from '../router/index.js'
 import {
-  deleteQuiz,
   getQuizWithQuestionsById,
   updateQuiz,
 } from '../services/quizService.js'
 import { addStylesheet } from '../utils.js'
 
 export default function EditQuiz({ id }) {
-  addStylesheet(
-    '.edit-quiz-view',
-    'edit-quiz-view',
-    '/components/quiz-form.css'
-  )
+  addStylesheet('quiz-form-css', '/components/quiz-form.css')
+
   queueMicrotask(() => init(id))
 
   return /*html*/ `
@@ -23,55 +20,28 @@ export default function EditQuiz({ id }) {
         <p class="description">Edit your quiz. Editing will not effect completed playthroughs of the quiz. Fill in all fields and add between 3 to 10 questions.</p>
         </div>
       </header>
-      <quiz-data-form>
-        <button slot="delete-quiz" class="button delete-quiz-button danger">Delete quiz</button>
-      </quiz-data-form>
+       ${QuizDataForm()}
     </div>
   `
 }
 
 const init = async (id) => {
   const quiz = await getQuizWithQuestionsById(id)
-
   if (!quiz) return
 
-  const header = document.querySelector('#header')
-  header.querySelector('.view-header').textContent = `Edit Quiz: ${quiz.title}`
+  document.querySelector('.view-header').textContent =
+    `Edit Quiz: ${quiz.title}`
 
-  const formEl = document.querySelector('quiz-data-form')
-
-  formEl.shadowRoot.querySelector('[name="title"]').value = quiz.title
-  formEl.shadowRoot.querySelector('[name="description"]').value =
-    quiz.description
-  formEl.shadowRoot.querySelector('[name="category"]').value = quiz.category
-  formEl.shadowRoot.querySelector('[type="submit"]').textContent = 'Update quiz'
-
-  formEl.setQuestions(quiz.questions)
-
-  document
-    .querySelector('.delete-quiz-button')
-    .addEventListener('click', async () => {
-      const res = await deleteQuiz(id)
-
-      if (!res.ok) {
-        formEl.error.hidden = false
-        formEl.error.textContent = res.data.message
-        return
-      }
-      navigate('/my-quizzes')
-    })
-
-  formEl.addEventListener('formSubmit', async (e) => {
-    const data = e.detail
-    data.meta._id = id
-
-    const res = await updateQuiz(data)
-
+  const onSubmit = async ({ meta, questions, deletedQuestionIds }) => {
+    const res = await updateQuiz({ meta, questions, deletedQuestionIds })
     if (!res.ok) {
-      formEl.error.hidden = false
-      formEl.error.textContent = res.data.message
-      return
+      return { errorMessage: res.data?.message }
     }
-    navigate('/my-quizzes')
-  })
+  }
+
+  const { addQuestion } = handleQuizDataForm(
+    document.querySelector('.edit-quiz-view'),
+    onSubmit,
+    quiz
+  )
 }

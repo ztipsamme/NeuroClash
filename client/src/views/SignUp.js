@@ -2,8 +2,7 @@ import { addStylesheet } from '../utils.js'
 
 export default function SignUp() {
   addStylesheet(
-    '.sign-up-view',
-    'sign-up-view',
+    'sign-in-and-sign-up-css',
     '/components/sign-in-and-sign-up.css'
   )
 

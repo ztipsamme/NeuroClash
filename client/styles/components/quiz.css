@@ -1,10 +1,32 @@
-@import '../global.css';
+.quiz-container {
+  --_padding-block: calc(var(--main-content-padding) * 2);
+  height: calc(100vh - (var(--_padding-block)));
+}
+
+@media screen and (max-width: 639px) {
+  .quiz-container {
+    --_padding-block: calc(var(--main-content-padding) * 4);
+    height: calc(100vh - (var(--_padding-block)));
+  }
+}
+
+.quiz-play-form {
+  align-items: unset;
+}
+
+.question-statement {
+  font-size: 1.2rem;
+}
 
 .answers {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-auto-rows: 48px;
+  grid-template-columns: repeat(auto-fit, minmax(min(30ch, 100%), 1fr));
+  grid-auto-rows: minmax(min(3lh, 100%), 1fr);
   gap: var(--spacing-sm);
+}
+
+button.answer {
+  height: 100%;
 }
 
 button.answer.correct {
@@ -13,14 +35,6 @@ button.answer.correct {
 
 button.answer.incorrect {
   --color-base: var(--color-danger);
-}
-
-button:not(.ghost).answer.correct,
-button.answer.incorrect {
   font-weight: var(--font-weight-bold);
   background: var(--color-gradient);
-}
-
-button:disabled {
-  --color-base: var(--color-primary);
 }

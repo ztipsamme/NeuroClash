@@ -1,36 +1,21 @@
 import { createPlayableQuiz, getQuizById } from '../services/quizService.js'
-
-const landing = /*html*/ `
-      <h1 id="quiz-title">Loading quiz...</h1>
-      <p id="quiz-description"></p>
-      <p id="quiz-meta"></p>
-      <button id="play-quiz" class="sm">Start Quiz</button>
-      `
-
-const play = /*html*/ `
-      <h1 id="quiz-title">Loading quiz...</h1>
-
-      <span id="quiz-timer"></span>
-
-      <form id="quiz-play-form">
-        <p class="question-statement"></p>
-        <div class="answers"></div>
-      </form>
-      `
+import { addStylesheet } from '../utils.js'
 
 export default function Quiz({ id }) {
-  if (!document.getElementById('quiz-css')) {
-    const link = document.createElement('link')
-    link.id = 'quiz-css'
-    link.rel = 'stylesheet'
-    link.href = '/styles/components/quiz.css'
-    document.head.appendChild(link)
-  }
+  addStylesheet('quiz-css', '/components/quiz.css')
 
   queueMicrotask(() => init(id))
 
   return /* html */ `
-    <div id="quiz-view">
+    <div id="quiz-view" class="quiz-view">
+      <div class="quiz-container card">
+        <h1 id="quiz-title">Loading quiz...</h1>
+        <div class="quiz-content">
+          <p id="quiz-created-by" class="quiz-created-by"></p>
+          <p id="quiz-description" class="quiz-description"></p>
+          <button id="start-quiz-button">Start Quiz</button>
+        </div>
+      </div>
     </div>
   `
 }
@@ -38,17 +23,23 @@ export default function Quiz({ id }) {
 const init = async (id) => {
   try {
     const quiz = await getQuizById(id)
+    const quizContent = document.querySelector('.quiz-content')
+    const startQuizButton = quizContent.querySelector('#start-quiz-button')
 
-    const quizView = document.querySelector('#quiz-view')
-    quizView.innerHTML = landing
-
-    document.querySelector('#quiz-title').textContent = `Landing: ${quiz.title}`
-    document.querySelector('#quiz-description').textContent = quiz.description
-    document.querySelector('#quiz-meta').textContent =
+    document.querySelector('#quiz-title').textContent = quiz.title
+    quizContent.querySelector('#quiz-description').textContent =
+      quiz.description
+    quizContent.querySelector('#quiz-created-by').textContent =
       `Created by ${quiz.createdBy.username}`
 
-    document.querySelector('#play-quiz').addEventListener('click', () => {
-      quizView.innerHTML = play
+    startQuizButton.addEventListener('click', () => {
+      quizContent.innerHTML = /*html */ `
+        <span id="quiz-timer" class="quiz-timer"></span>
+        <form id="quiz-play-form" class="quiz-play-form">
+          <h2 class="question-statement"></h2>
+          <div class="answers"></div>
+        </form>
+      `
       PlayQuiz(id)
     })
   } catch (err) {
@@ -60,13 +51,14 @@ const PlayQuiz = async (id) => {
   const quiz = await createPlayableQuiz(id)
   if (!quiz) return
 
-  document.querySelector('#quiz-title').textContent = `Play Quiz: ${quiz.title}`
-
-  const timer = document.querySelector('#quiz-timer')
-  const form = document.querySelector('#quiz-play-form')
+  const quizContent = document.querySelector('.quiz-content')
+  const timer = quizContent.querySelector('#quiz-timer')
+  const form = quizContent.querySelector('#quiz-play-form')
   const statementEl = form.querySelector('.question-statement')
   const answers = form.querySelector('.answers')
   let currentQuestion = null
+
+  quizContent.classList.add('play-quiz-container')
 
   const renderQuestion = () => {
     currentQuestion = quiz.getCurrentQuestion()
@@ -77,14 +69,16 @@ const PlayQuiz = async (id) => {
     answers.innerHTML = currentQuestion.answers
       .map(
         (answer, idx) =>
-          `<button type="button" data-index="${idx}" class="answer ghost">${answer.text}</button>`
+          `<button type="button" data-index="${idx}" class="answer">${answer.text}</button>`
       )
       .join('')
 
-    quiz.startTimer(
-      (seconds) => (timer.textContent = `Time: ${seconds}s`),
-      () => lockAndResolveQuestion()
-    )
+    timer.textContent = 'Time: 00s'
+
+    // quiz.startTimer(
+    //   (seconds) => (timer.textContent = `Time: ${seconds}s`),
+    //   () => lockAndResolveQuestion()
+    // )
   }
 
   renderQuestion()
@@ -121,7 +115,7 @@ const PlayQuiz = async (id) => {
 
     setTimeout(() => {
       quiz.result()
-      renderQuestion()
+      // renderQuestion()
     }, 800)
   }
 }

@@ -4,8 +4,7 @@ import { addStylesheet } from '../utils.js'
 
 export default function SignIn() {
   addStylesheet(
-    '.sign-in-view',
-    'sign-in-view',
+    'sign-in-and-sign-up-css',
     '/components/sign-in-and-sign-up.css'
   )
 
