@@ -41,3 +41,19 @@ export const ValidateQuiz = ({ meta, questions }) => {
 }
 
 export const ValidateUser = (userId, req) => userId === req.user.userId
+
+export const kebabToNormal = (str) =>
+  str
+    .split('-')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ')
+
+export function deslugify(slug) {
+  if (!slug) return ''
+
+  return slug
+    .replace(/-/g, ' ')
+    .split(' ')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ')
+}

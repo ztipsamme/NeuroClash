@@ -1,5 +1,5 @@
+import { addStylesheet } from '../core/utils.js'
 import { createPlayableQuiz, getQuizById } from '../services/quizService.js'
-import { addStylesheet } from '../utils.js'
 
 export default function Quiz({ id }) {
   addStylesheet('quiz-css', '/components/quiz.css')
@@ -75,10 +75,10 @@ const PlayQuiz = async (id) => {
 
     timer.textContent = 'Time: 00s'
 
-    // quiz.startTimer(
-    //   (seconds) => (timer.textContent = `Time: ${seconds}s`),
-    //   () => lockAndResolveQuestion()
-    // )
+    quiz.startTimer(
+      (seconds) => (timer.textContent = `Time: ${seconds}s`),
+      () => lockAndResolveQuestion()
+    )
   }
 
   renderQuestion()
@@ -115,7 +115,7 @@ const PlayQuiz = async (id) => {
 
     setTimeout(() => {
       quiz.result()
-      // renderQuestion()
+      renderQuestion()
     }, 800)
   }
 }

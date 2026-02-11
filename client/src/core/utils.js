@@ -17,3 +17,38 @@ export const Icon = (iconName) => {
   const icon = lucide.createElement(lucide[iconName])
   return icon.outerHTML
 }
+
+export const toCamelCase = (str) =>
+  str
+    .toLowerCase()
+    .split(/[\s-_]+/)
+    .map((word, i) =>
+      i === 0 ? word : word.charAt(0).toUpperCase() + word.slice(1)
+    )
+    .join('')
+
+export const slugify = (text) => {
+  return text
+    .toString()
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, '-')
+    .replace(/[^\w\-]+/g, '')
+    .replace(/\-\-+/g, '-')
+}
+
+export const toNormal = (str) =>
+  str
+    .split('-')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ')
+
+export const addStylesheet = (id, stylesheet) => {
+  if (document.getElementById(id)) return
+
+  const link = document.createElement('link')
+  link.id = id
+  link.rel = 'stylesheet'
+  link.href = `/styles${stylesheet}`
+  document.head.appendChild(link)
+}

@@ -1,11 +1,10 @@
 import '../components/QuizDataForm.js'
 import { handleQuizDataForm, QuizDataForm } from '../components/QuizDataForm.js'
-import { navigate } from '../router/index.js'
+import { addStylesheet } from '../core/utils.js'
 import {
   getQuizWithQuestionsById,
   updateQuiz,
 } from '../services/quizService.js'
-import { addStylesheet } from '../utils.js'
 
 export default function EditQuiz({ id }) {
   addStylesheet('quiz-form-css', '/components/quiz-form.css')

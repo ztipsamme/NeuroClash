@@ -1,13 +1,8 @@
 import { QuizCard } from '../components/QuizCard.js'
 import QuizList from '../components/QuizList.js'
-import { Icon } from '../core/utils.js'
-import {
-  getCategorizedQuizzes,
-  getMyQuizzes,
-  getTopQuiz,
-} from '../services/quizService.js'
+import { addStylesheet, slugify } from '../core/utils.js'
+import { getQuizzes, getTopQuiz } from '../services/quizService.js'
 import { getCurrentUser } from '../services/userService.js'
-import { addStylesheet } from '../utils.js'
 
 export default function Home() {
   addStylesheet('home-css', '/components/home.css')
@@ -43,12 +38,17 @@ const init = async () => {
 
   const quizzesByCategory = document.querySelector('.quiz-lists-container')
 
-  const categorizedLists = await getCategorizedQuizzes(6)
+  const categorizedLists = await getQuizzes(`/?groupBy=category&groupLimit=6`)
 
   categorizedLists.forEach(async (l) => {
     const content = /*html*/ `
       <section class="quiz-list-container">
+      <header>
         <h3 class="quiz-list-title">${l.categoryName}</h3>
+        <a href="/quizzes/${slugify(l.categoryName)}">
+        View more
+      </a>
+      </header>
         ${await QuizList(l.list)}
       </section>
       `
@@ -58,7 +58,6 @@ const init = async () => {
 
 const setFeaturedQuiz = async () => {
   const { _id, title, description, category, createdBy } = await getTopQuiz()
-
   const featuredQuiz = document.querySelector('.featured')
   featuredQuiz.innerHTML = /*html*/ `
         <header>

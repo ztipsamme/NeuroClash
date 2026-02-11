@@ -1,6 +1,6 @@
+import { addStylesheet } from '../core/utils.js'
 import { navigate } from '../router/index.js'
 import { signInUser } from '../services/userService.js'
-import { addStylesheet } from '../utils.js'
 
 export default function SignIn() {
   addStylesheet(

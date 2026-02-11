@@ -1,4 +1,4 @@
-import { addStylesheet } from '../utils.js'
+import { addStylesheet } from '../core/utils.js'
 
 export default function SignUp() {
   addStylesheet(

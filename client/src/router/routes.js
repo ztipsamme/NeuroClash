@@ -4,6 +4,7 @@ import Home from '../views/Home.js'
 import MyQuizzes from '../views/MyQuizzes.js'
 import Quiz from '../views/Quiz.js'
 import QuizResult from '../views/QuizResult.js'
+import Quizzes from '../views/Quizzes.js'
 import SignIn from '../views/SignIn.js'
 import SignUp from '../views/SignUp.js'
 
@@ -26,6 +27,11 @@ export const routes = [
   {
     path: '/my-quizzes/edit/:id',
     view: EditQuiz,
+    isProtected: true,
+  },
+  {
+    path: '/quizzes/:categoryName',
+    view: Quizzes,
     isProtected: true,
   },
   {

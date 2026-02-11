@@ -9,6 +9,12 @@ const fetchData = async (path) => {
   return data
 }
 
+export const getQuizzes = async (path = '/') => {
+  const res = await fetch(url + path)
+  const data = await res.json()
+  return data
+}
+
 export const getMyQuizzes = async () => {
   const user = await getCurrentUser()
 
@@ -20,19 +26,15 @@ export const getMyQuizzes = async () => {
   return data
 }
 
-export const getCategorizedQuizzes = async (limit) =>
-  await fetchData(`/categorized` + (limit ? `?limit=${limit}` : ''))
+export const getQuizById = async (id) => await fetchData(`/${id}/meta`)
 
-export const getQuizById = async (id) => await fetchData(`/quiz-meta/${id}`)
-
-export const getQuizWithQuestionsById = async (id) =>
-  await fetchData(`/quiz/${id}`)
+export const getQuizWithQuestionsById = async (id) => await fetchData(`/${id}`)
 
 export const getTopQuiz = async () => await fetchData(`/top-quiz`)
 
 export const createQuiz = async (quiz) => {
   try {
-    const res = await fetch(url + '/quiz', {
+    const res = await fetch(url + '/', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
@@ -57,7 +59,7 @@ export const updateQuiz = async (quiz) => {
   const id = quiz.meta._id
 
   try {
-    const res = await fetch(url + `/quiz/${id}`, {
+    const res = await fetch(url + `/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
@@ -80,7 +82,7 @@ export const updateQuiz = async (quiz) => {
 
 export const deleteQuiz = async (id) => {
   try {
-    const res = await fetch(url + `/quiz/${id}`, {
+    const res = await fetch(url + `/${id}`, {
       method: 'DELETE',
       credentials: 'include',
     })

@@ -25,7 +25,7 @@ router.get('/my-quizzes/:userId', requireAuth, async (req, res) => {
   }
 })
 
-router.post('/quiz', requireAuth, async (req, res) => {
+router.post('/', requireAuth, async (req, res) => {
   const { meta, questions } = req.body
 
   if (!meta || !questions)
@@ -49,7 +49,7 @@ router.post('/quiz', requireAuth, async (req, res) => {
   }
 })
 
-router.put('/quiz/:id', requireAuth, async (req, res) => {
+router.put('/:id', requireAuth, async (req, res) => {
   const { id } = req.params
   const body = req.body
   const quiz = await findQuizById(id)
@@ -82,7 +82,7 @@ router.put('/quiz/:id', requireAuth, async (req, res) => {
   }
 })
 
-router.delete('/quiz/:id', requireAuth, async (req, res) => {
+router.delete('/:id', requireAuth, async (req, res) => {
   const { id } = req.params
   const session = client.startSession()
   const quiz = await findQuizById(id)

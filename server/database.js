@@ -2,33 +2,22 @@ import 'dotenv/config'
 import { MongoClient } from 'mongodb'
 
 const uri = process.env.MONGODB_URI
+if (!uri) throw new Error('MONGODB_URI is not defined')
+
 export const client = new MongoClient(uri)
-let database = client.db('db')
-let connect$
 
-async function _connectToDatabase() {
-  if (database) return database
-
-  if (!uri) {
-    throw new Error('MONGODB_URI is not defined')
-  }
-
-  await client.connect()
-
-  console.log(`Connected to database: ${database.databaseName}`)
-
-  return database
-}
+let db
 
 export async function connectToDatabase() {
-  connect$ ??= _connectToDatabase()
-  return await connect$
+  if (!db) {
+    await client.connect()
+    db = client.db('db')
+    console.log(`Connected to database: ${db.databaseName}`)
+  }
+  return db
 }
 
 export function getCollection(collectionName) {
-  if (!database) {
-    throw new Error('Database not connected.')
-  }
-
-  return database.collection(collectionName)
+  if (!db) throw new Error('Database not connected')
+  return db.collection(collectionName)
 }

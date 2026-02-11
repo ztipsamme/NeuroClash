@@ -1,9 +1,8 @@
+import '../components/QuizDataForm.js'
+import { handleQuizDataForm, QuizDataForm } from '../components/QuizDataForm.js'
+import { addStylesheet } from '../core/utils.js'
 import { navigate } from '../router/index.js'
 import { createQuiz } from '../services/quizService.js'
-import { getCurrentUser } from '../services/userService.js'
-import '../components/QuizDataForm.js'
-import { addStylesheet } from '../utils.js'
-import { handleQuizDataForm, QuizDataForm } from '../components/QuizDataForm.js'
 
 export default function CreateQuiz() {
   addStylesheet('quiz-form-css', '/components/quiz-form.css')
