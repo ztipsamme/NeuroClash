@@ -7,7 +7,7 @@ export default function MyQuizzes() {
   return /* html */ `
   <div class="my-quizzes">
     <h1>My Quizzes</h1>
-    <a href="/my-quizzes/create-quiz" class="button secondary">New Quiz</a>
+    <a href="/my-quizzes/create-quiz" class="button">New Quiz</a>
       <div class="quiz-lists-container">
       </div>
   </div>`

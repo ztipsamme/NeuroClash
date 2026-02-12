@@ -28,10 +28,12 @@ a {
   display: inline-flex;
   gap: var(--spacing-sm);
   align-items: center;
+  text-decoration: none;
 }
 
 a:hover {
   --color: var(--color-dark);
+  text-decoration: underline;
 }
 
 a.secondary:hover {
@@ -53,7 +55,6 @@ a.button {
   cursor: pointer;
   font-weight: var(--weight);
   padding: var(--p-sm);
-  text-decoration: none;
   align-self: self-start;
   display: flex;
   gap: var(--spacing-sm);

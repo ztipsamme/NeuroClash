@@ -12,8 +12,8 @@ export default function Home() {
   return /* html */ `
   <div id="home-view">
     <h1 class="sr-only">Home</h1>
-    <div class="hero split-view">
-      <section class="hero-section">
+    <div class="hero split-view bleed-width">
+      <section class="hero-section ">
         <h2 class="greeting hero-text"></h2>
         <img src="/public/man-horizontal.svg" alt="Man illustration" class="hero-image"/>
       </section>

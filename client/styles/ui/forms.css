@@ -5,7 +5,6 @@ form {
   max-width: var(--content-max-width);
   justify-content: center;
   align-items: center;
-  margin: auto;
 }
 
 legend {

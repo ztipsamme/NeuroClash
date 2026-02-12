@@ -13,7 +13,7 @@ export const QuizCard = ({
   return /*html*/ `
     <a href="${url}" class="quiz-card card quiz-link">
       <header>
-        <h3 class="quiz-title">${title}</h3>
+        <h4 class="quiz-title">${title}</h4>
         <p class="quiz-category">${category}</p>
       </header>
 

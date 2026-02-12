@@ -40,8 +40,6 @@ router.get('/', async (req, res) => {
       limit: groupBy ? undefined : Number(limit),
     })
 
-    console.log(quizzes)
-
     if (groupBy === 'category')
       quizzes = await groupQuizzesByCategory(quizzes, groupLimit)
 

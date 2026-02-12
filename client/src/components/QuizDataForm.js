@@ -5,8 +5,6 @@ import { QuestionCard } from './QuestionCard.js'
 import { navigate } from '../router/index.js'
 
 export function QuizDataForm() {
-  const isEdit = window.location.pathname.includes('/edit-quiz')
-
   return /*html*/ `
     <form class="quiz-data-form center">
       <fieldset class="card">
@@ -25,14 +23,9 @@ export function QuizDataForm() {
 
       <div class="submit-and-delete">
         <button type="submit">Submit</button>
-        ${
-          isEdit
-            ? ''
-            : /*html*/ `
-              <button slot="delete-quiz" class="button delete-quiz-button danger">
-                Delete quiz
-              </button>`
-        }
+        <button slot="delete-quiz" class="button delete-quiz-button danger">
+          Delete quiz
+        </button>
       </div>
     </form>
   `
@@ -183,5 +176,3 @@ export const handleQuizDataForm = (container, onSubmit, quiz = null) => {
 
   return { addQuestion }
 }
-
-// document

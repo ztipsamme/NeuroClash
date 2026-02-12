@@ -10,17 +10,19 @@
 
 :root {
   --color-primary: var(--color-sweet-peony);
-  --color-secondary: var(--color-french-blue);
+  --color-secondary: var(--color-glaucous);
+  --color-tertiary: var(--color-french-blue);
   --color-success: var(--color-light-green);
   --color-danger: var(--color-cherry-rose);
   --color-disabled: hsl(from var(--color-graphite) h s calc(l + 30));
 
-  --color-text-light: var(--color-graphite);
+  --color-text-light: var(--color-bright-snow);
   --color-text-medium: hsl(from var(--color-graphite) h s calc(l + 30));
-  --color-text-dark: var(--color-bright-snow);
+  --color-text-dark: var(--color-graphite);
 
-  --color-background: hsl(from var(--color-glaucous) h s calc(l + 30));
+  --color-background: var(--color-french-blue);
   --color-background-secondary: var(--color-bright-snow);
+  --color-background-tertiary: hsl(from var(--color-glaucous) h s calc(l + 30));
 }
 
 * {

@@ -36,8 +36,16 @@
   width: 100%;
 }
 
-button[type='submit'],
-.delete-quiz-button {
-  width: 14ch;
-  justify-content: center;
+.edit-quiz-view {
+  button[type='submit'],
+  .delete-quiz-button {
+    width: 14ch;
+    justify-content: center;
+  }
+}
+
+.create-quiz-view {
+  .delete-quiz-button {
+    display: none;
+  }
 }

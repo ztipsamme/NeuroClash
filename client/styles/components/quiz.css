@@ -15,7 +15,7 @@
 }
 
 .question-statement {
-  font-size: 1.2rem;
+  font-size: var(--text-lg);
 }
 
 .answers {

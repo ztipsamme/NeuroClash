@@ -1,11 +1,10 @@
 a.quiz-card {
-  color: unset;
   font-weight: unset;
-  text-decoration: none;
   display: block;
   overflow: hidden;
   border: 2px solid transparent;
   position: relative;
+  text-decoration: none;
 }
 
 .quiz-card,
@@ -61,8 +60,13 @@ a.quiz-card {
   }
 }
 
+.quiz-card header {
+  display: flex;
+  flex-direction: column;
+}
+
 .quiz-title {
-  font-size: 2rem;
+  font-size: var(--text-xl);
   font-weight: var(--font-bold);
   line-height: var(--text-xl);
   text-overflow: clip;

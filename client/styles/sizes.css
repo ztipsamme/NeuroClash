@@ -9,6 +9,7 @@
   --2xl: 20px;
   --3xl: 24px;
   --4xl: 32px;
+  --5xl: 40px;
 }
 
 :root {
@@ -23,6 +24,9 @@
   --text-base: var(--md);
   --text-lg: var(--xl);
   --text-xl: var(--2xl);
+  --text-2xl: var(--3xl);
+  --text-3xl: var(--4xl);
+  --text-4xl: 2.5rem;
 
   /* Font-Weights */
   --font-light: 300;

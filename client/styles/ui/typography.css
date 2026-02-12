@@ -1,12 +1,13 @@
 h1 {
   --color-base: var(--color-secondary);
-  font-size: 2.5rem;
+  font-size: var(--text-4xl);
   font-weight: var(--font-bolder);
 }
 
 strong,
-.logo {
-  --color-base: var(--color-secondary);
+.logo,
+.page-heading {
+  --color-base: var(--color-tertiary);
 
   background: var(--color-gradient);
   background-clip: text;
@@ -27,29 +28,9 @@ h2:has(strong) {
 }
 
 h2 {
-  font-size: 2rem;
   font-weight: var(--font-bold);
+  font-size: var(--text-3xl);
 }
-
-/* h3 {
-  font-size: 1.5rem;
-  font-weight: var(--font-medium);
-}
-
-h4 {
-  font-size: 1.25rem;
-  font-weight: var(--font-medium);
-}
-
-h5 {
-  font-size: 1rem;
-  font-weight: var(--font-medium);
-}
-
-h6 {
-  font-size: 0.875rem;
-  font-weight: var(--font-medium);
-} */
 
 strong {
   font-size: inherit;
