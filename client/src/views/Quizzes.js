@@ -9,7 +9,7 @@ export default function QuizzesByCategory({ categoryName }) {
 
   return /* html */ `
   <div id="quizzes-view">
-    <h1 class="page-heading">${toNormal(categoryName)}</h1>
+    <h1>${toNormal(categoryName)}</h1>
     <div class="quizzes-container">
     </div>
   </div>`

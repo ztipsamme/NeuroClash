@@ -24,7 +24,7 @@
 }
 
 .quizzes-by-category {
-  padding-top: var(--main-content-padding);
+  padding-block: var(--main-content-padding);
 
   header {
     display: flex;

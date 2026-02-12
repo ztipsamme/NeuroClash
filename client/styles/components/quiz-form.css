@@ -26,6 +26,10 @@
   right: 0;
 }
 
+.delete-question-button:not(:disabled) {
+  color: var(--color-text-light);
+}
+
 #add-btn {
   margin-top: var(--spacing-md);
 }

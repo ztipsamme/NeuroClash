@@ -10,7 +10,7 @@ export default function Home() {
   queueMicrotask(() => init())
 
   return /* html */ `
-  <div id="home-view">
+  <div id="home-view" class="align-main-content-with-top">
     <h1 class="sr-only">Home</h1>
     <div class="hero split-view bleed-content">
       <section class="hero-section ">

@@ -5,8 +5,7 @@ h1 {
 }
 
 strong,
-.logo,
-.page-heading {
+.logo {
   --color-base: var(--color-tertiary);
 
   background: var(--color-gradient);
@@ -40,4 +39,10 @@ strong {
   font-size: 2rem;
   margin-bottom: 0;
   padding: var(--p-sm);
+}
+
+@media screen and (max-width: 639px) {
+  .logo {
+    padding-inline: var(--main-content-padding-inline);
+  }
 }
