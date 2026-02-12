@@ -1,0 +1,18 @@
+.result-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 12lh;
+  gap: var(--spacing-lg);
+}
+
+.result-table {
+  th {
+    width: 10ch;
+  }
+}
+
+a.button {
+  align-self: unset;
+}
