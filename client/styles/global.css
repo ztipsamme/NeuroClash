@@ -252,7 +252,7 @@ img {
   position: relative;
 }
 
-.bleed-width {
+.bleed-content {
   margin-block: calc(var(--main-content-padding) * -1);
   margin-inline: calc(var(--main-content-padding-inline) * -1);
   padding-block: var(--main-content-padding);

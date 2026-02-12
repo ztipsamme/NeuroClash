@@ -21,7 +21,7 @@ export default function SignUp() {
   })
 
   return /* html */ `
-  <div id="sign-up-view" class="sign-up-view split-view center-content">
+  <div id="sign-up-view" class="sign-up-view split-view center-content bleed-content">
     <img alt="Man illustration" class="auth-image"/>
 
     <div class="sign-up-content">

@@ -51,7 +51,7 @@ a.button {
   background: var(--bg);
   border: transparent;
   border-radius: var(--radius-sm);
-  color: var(--color-background);
+  color: var(--text-color-light);
   cursor: pointer;
   font-weight: var(--weight);
   padding: var(--p-sm);
@@ -111,6 +111,7 @@ a.ghost {
   &:hover,
   .active {
     font-weight: var(--weight);
-    -webkit-text-fill-color: var(--color-background);
+    -webkit-text-fill-color: var(--text-color-light);
+    color: var(--text-color-light);
   }
 }

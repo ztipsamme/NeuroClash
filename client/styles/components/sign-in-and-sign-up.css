@@ -1,6 +1,17 @@
+.sign-in-view,
+.sign-up-view {
+  background: var(--color-background-tertiary);
+  color: var(--color-text-dark);
+  min-height: 100vh;
+}
+
+button {
+  color: var(--color-text-light);
+}
+
 .auth-image {
   max-width: min(calc(var(--content-max-width) / 2), 100%);
-  margin: auto;
+  margin-inline: auto;
 }
 
 .sign-in-content,

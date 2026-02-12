@@ -11,7 +11,7 @@ export default function SignIn() {
   queueMicrotask(() => init())
 
   return /* html */ `
-  <div id="sign-in-view" class="sign-in-view split-view center-content">
+  <div id="sign-in-view" class="sign-in-view split-view center-content bleed-content">
     <img alt="Man illustration" class="auth-image"/>
 
     <div class="sign-in-content">
@@ -26,7 +26,7 @@ export default function SignIn() {
         <p class="errorMessage" hidden="true"></p>
         <button type="submit">Sign in</button>
       </form>
-      <p>No account? No worries, <a href="/sign-up" class=" secondary">sign up here!</a></p>
+      <p>No account? No worries, <a href="/sign-up" class="tertiary">sign up here!</a></p>
     </div>
   </div>`
 }

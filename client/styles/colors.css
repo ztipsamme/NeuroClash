@@ -44,6 +44,9 @@
 .secondary {
   --color-base: var(--color-secondary);
 }
+.tertiary {
+  --color-base: var(--color-tertiary);
+}
 .success {
   --color-base: var(--color-success);
 }
